@@ -28,7 +28,7 @@ export default function TransformationSection() {
         taille), séparés par un vrai espace — jamais de chevauchement — puis
         centrés ensemble sur la page.
       */}
-      <div className="mx-auto mt-14 w-fit sm:grid sm:grid-cols-[auto_auto] sm:gap-10">
+      <div className="mx-auto mt-14 w-full sm:w-fit sm:grid sm:grid-cols-[auto_auto] sm:gap-10">
         {/* Avant : simple, en retrait */}
         <div className="pt-5 sm:pt-6">
           <p className="pb-3 text-xs font-medium uppercase tracking-[0.14em] text-espresso-400">Avant</p>
@@ -38,7 +38,7 @@ export default function TransformationSection() {
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-espresso-900/5 text-espresso-400">
                   <X className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
-                <p className="whitespace-nowrap text-base leading-snug text-espresso-400">{row.before}</p>
+                <p className="text-base leading-snug text-espresso-400 sm:whitespace-nowrap">{row.before}</p>
               </FadeIn>
             ))}
           </div>
@@ -60,7 +60,7 @@ export default function TransformationSection() {
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
                   <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
-                <p className="whitespace-nowrap text-base font-medium leading-snug text-espresso-900">{row.after}</p>
+                <p className="text-base font-medium leading-snug text-espresso-900 sm:whitespace-nowrap">{row.after}</p>
               </FadeIn>
             ))}
           </div>

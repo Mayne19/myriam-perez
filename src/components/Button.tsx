@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 type ButtonProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "outline";
   external?: boolean;
   className?: string;
 };
@@ -16,9 +16,12 @@ export default function Button({ href, children, variant = "primary", external, 
   const styles =
     variant === "primary"
       ? "bg-accent text-cream-50 hover:bg-accent-dark hover:-translate-y-0.5 hover:text-cream-50"
-      : // Bouton secondaire : vide au repos, rempli en beige au survol,
-        // avec le texte qui bascule en brun foncé.
-        "bg-transparent text-cream-50 border border-cream-50/40 hover:bg-cream-50 hover:border-cream-50 hover:text-espresso-900";
+      : variant === "secondary"
+        ? // Bouton secondaire : vide au repos, rempli en beige au survol,
+          // avec le texte qui bascule en brun foncé. Pour fond sombre.
+          "bg-transparent text-cream-50 border border-cream-50/40 hover:bg-cream-50 hover:border-cream-50 hover:text-espresso-900"
+        : // Contour : même logique que le secondaire, mais pour fond clair.
+          "bg-transparent text-espresso-900 border border-espresso-900/20 hover:bg-espresso-900 hover:border-espresso-900 hover:text-cream-50";
 
   return (
     <Link

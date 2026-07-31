@@ -15,7 +15,14 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-cream-50 p-3 lg:p-6">
-      <div className="grid h-[90vh] w-full max-w-6xl lg:grid-cols-[35%_65%] lg:gap-6">
+      {/*
+        Le panneau témoignages est pensé pour occuper toute la hauteur de sa
+        colonne : sur mobile, où la grille redevient une seule colonne, il
+        n'y a plus de colonne à remplir — on le masque et on laisse le
+        formulaire respirer avec sa propre hauteur, au lieu de forcer les
+        deux dans 90 % de l'écran empilés l'un sur l'autre.
+      */}
+      <div className="grid w-full max-w-6xl lg:h-[90vh] lg:grid-cols-[35%_65%] lg:gap-6">
         <div className="flex items-center justify-center p-6 md:p-10">
           <AuthForm initialMode={initialMode} />
         </div>

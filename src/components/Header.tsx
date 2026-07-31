@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { NAV_LINKS, CALENDLY_URL } from "@/data/nav";
 
 /**
@@ -13,9 +14,15 @@ import { NAV_LINKS, CALENDLY_URL } from "@/data/nav";
 export default function Header() {
   const barRef = useRef<HTMLDivElement>(null);
   const [onDark, setOnDark] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
+  // Le menu déplié se referme dès qu'on change de page.
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     let frame = 0;
@@ -70,71 +77,139 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div
           ref={barRef}
-          className={`flex w-full flex-col items-center gap-4 rounded-[2rem] border px-6 py-4 backdrop-blur-md transition-colors duration-300 sm:flex-row sm:justify-between sm:gap-6 sm:rounded-full sm:py-3 lg:pl-8 lg:pr-3 ${glass}`}
+          className={`w-full overflow-hidden border px-6 py-4 backdrop-blur-md transition-colors duration-300 lg:rounded-full lg:py-3 lg:pl-8 lg:pr-3 ${
+            mobileOpen ? "rounded-[2rem]" : "rounded-full"
+          } ${glass}`}
         >
-          {/*
-            Deux versions du logo, une par fond, comme sur le reste de
-            l'en-tête (pas de carte ni de fond derrière — juste le dessin).
-            Largeur en `auto` : ne jamais forcer une largeur fixe, ça
-            déforme le dessin.
-          */}
-          <Link href="/" className="flex shrink-0 items-center gap-3 no-underline">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={onDark ? "/images/logo-mp-white.png" : "/images/icon-mp.png"}
-              alt="Myriam Perez"
-              className="h-11 w-auto sm:h-12"
-            />
-            <span className={`flex flex-col text-left leading-tight transition-colors duration-300 ${textColor}`}>
-              <span className="font-bold tracking-tight">Myriam Perez</span>
-              <span className="text-sm font-medium opacity-70">Inspire &amp; Impact</span>
-            </span>
-          </Link>
-
-          <nav
-            className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium transition-colors duration-300 lg:gap-x-8 ${linkColor}`}
-          >
-            <Link
-              href="/"
-              className={`no-underline whitespace-nowrap transition-colors hover:text-accent ${
-                isActive("/") ? "font-semibold text-accent" : ""
-              }`}
-            >
-              Accueil
+          {/* Rangée toujours visible : logo à gauche, nav + boutons (grand écran) ou hamburger (mobile) à droite */}
+          <div className="flex w-full items-center justify-between gap-4">
+            {/*
+              Deux versions du logo, une par fond, comme sur le reste de
+              l'en-tête (pas de carte ni de fond derrière — juste le dessin).
+              Largeur en `auto` : ne jamais forcer une largeur fixe, ça
+              déforme le dessin.
+            */}
+            <Link href="/" className="flex shrink-0 items-center gap-3 no-underline">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={onDark ? "/images/logo-mp-white.png" : "/images/icon-mp.png"}
+                alt="Myriam Perez"
+                className="h-11 w-auto sm:h-12"
+              />
+              <span className={`hidden flex-col text-left leading-tight transition-colors duration-300 sm:flex ${textColor}`}>
+                <span className="font-bold tracking-tight">Myriam Perez</span>
+                <span className="text-sm font-medium opacity-70">Inspire &amp; Impact</span>
+              </span>
             </Link>
-            {NAV_LINKS.map((link) => (
+
+            <nav
+              className={`hidden items-center gap-x-8 text-sm font-medium transition-colors duration-300 lg:flex ${linkColor}`}
+            >
               <Link
-                key={link.href}
-                href={link.href}
+                href="/"
                 className={`no-underline whitespace-nowrap transition-colors hover:text-accent ${
-                  isActive(link.href) ? "font-semibold text-accent" : ""
+                  isActive("/") ? "font-semibold text-accent" : ""
                 }`}
               >
-                {link.label}
+                Accueil
               </Link>
-            ))}
-          </nav>
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`no-underline whitespace-nowrap transition-colors hover:text-accent ${
+                    isActive(link.href) ? "font-semibold text-accent" : ""
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-          <div className="flex shrink-0 items-center gap-3">
-            <Link
-              href="/login"
-              className={`no-underline rounded-full border px-5 py-3 text-sm font-medium transition-colors ${
-                onDark
-                  ? "border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-espresso-900"
-                  : "border-espresso-900/20 text-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
-              }`}
-            >
-              Connexion
-            </Link>
+            <div className="hidden shrink-0 items-center gap-3 lg:flex">
+              <Link
+                href="/login"
+                className={`no-underline rounded-full border px-5 py-3 text-sm font-medium transition-colors ${
+                  onDark
+                    ? "border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-espresso-900"
+                    : "border-espresso-900/20 text-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
+                }`}
+              >
+                Connexion
+              </Link>
 
-            <Link
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="no-underline rounded-full bg-accent px-7 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-accent-dark hover:text-cream-50"
+              <Link
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline rounded-full bg-accent px-7 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-accent-dark hover:text-cream-50"
+              >
+                Réserver
+              </Link>
+            </div>
+
+            {/* Hamburger — mobile et tablette uniquement */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-expanded={mobileOpen}
+              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 lg:hidden ${textColor}`}
             >
-              Réserver
-            </Link>
+              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+
+          {/* Menu déplié — mobile et tablette uniquement */}
+          <div
+            className="grid transition-[grid-template-rows] duration-300 ease-in-out lg:hidden"
+            style={{ gridTemplateRows: mobileOpen ? "1fr" : "0fr" }}
+          >
+            <div className="max-h-[70vh] overflow-y-auto overflow-x-hidden">
+              <nav className={`flex flex-col gap-1 pt-6 text-base font-medium transition-colors duration-300 ${linkColor}`}>
+                <Link
+                  href="/"
+                  className={`no-underline rounded-xl px-3 py-2.5 transition-colors hover:text-accent ${
+                    isActive("/") ? "font-semibold text-accent" : ""
+                  }`}
+                >
+                  Accueil
+                </Link>
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`no-underline rounded-xl px-3 py-2.5 transition-colors hover:text-accent ${
+                      isActive(link.href) ? "font-semibold text-accent" : ""
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="mt-4 flex flex-col gap-3 pb-2">
+                <Link
+                  href="/login"
+                  className={`no-underline rounded-full border px-5 py-3 text-center text-sm font-medium transition-colors ${
+                    onDark
+                      ? "border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-espresso-900"
+                      : "border-espresso-900/20 text-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
+                  }`}
+                >
+                  Connexion
+                </Link>
+
+                <Link
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline rounded-full bg-accent px-7 py-3 text-center text-sm font-medium text-cream-50 transition-colors hover:bg-accent-dark hover:text-cream-50"
+                >
+                  Réserver
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

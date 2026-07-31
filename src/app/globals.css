@@ -79,6 +79,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Filet de sécurité : aucun débordement horizontal ne doit jamais créer de scroll sur la page elle-même. */
+    overflow-x: hidden;
   }
   html {
     @apply font-sans;
