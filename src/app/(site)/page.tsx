@@ -54,7 +54,7 @@ export default function Home() {
       <Hero />
 
       {/* Preuves sociales */}
-      <section className="bg-cream-50 py-14 sm:py-20">
+      <section className="bg-cream-50 py-10 sm:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <FadeIn>
             <div className="grid gap-8 lg:grid-cols-[minmax(0,260px)_1fr] lg:gap-12">
@@ -88,7 +88,7 @@ export default function Home() {
       <TransformationSection />
 
       {/* Méthode Inspire & Impact */}
-      <section className="bg-cream-100 py-16 sm:py-24">
+      <section className="bg-cream-100 py-10 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <FadeIn>
             <SplitHeading
@@ -127,7 +127,7 @@ export default function Home() {
       <TestimonialsSection />
 
       {/* CTA final */}
-      <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
+      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-20">
         <FadeIn className="rounded-[40px] bg-espresso-900 px-8 py-12 text-center sm:px-16 sm:py-16" sectionTheme="dark">
           <SplitHeading
             as="h2"

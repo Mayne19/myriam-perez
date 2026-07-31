@@ -288,4 +288,52 @@
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 16%);
   }
+
+  /*
+    Boutons « contour » : transparents au repos, remplis au survol. Sur un
+    appareil tactile (téléphone, tablette), il n'y a pas de survol — ce
+    remplissage ne se déclencherait donc jamais. `(hover: hover)` ne cible
+    que les appareils qui savent vraiment survoler ; sur les autres, la
+    couleur pleine s'applique dès le départ, comme si le bouton était déjà
+    survolé.
+  */
+  .btn-outline-dark {
+    background-color: transparent;
+    border: 1px solid rgb(251 244 235 / 0.4);
+    color: #fbf4eb;
+  }
+  @media (hover: none) {
+    .btn-outline-dark {
+      background-color: #fbf4eb;
+      border-color: #fbf4eb;
+      color: #26221e;
+    }
+  }
+  @media (hover: hover) {
+    .btn-outline-dark:hover {
+      background-color: #fbf4eb;
+      border-color: #fbf4eb;
+      color: #26221e;
+    }
+  }
+
+  .btn-outline-light {
+    background-color: transparent;
+    border: 1px solid rgb(38 34 30 / 0.2);
+    color: #26221e;
+  }
+  @media (hover: none) {
+    .btn-outline-light {
+      background-color: #26221e;
+      border-color: #26221e;
+      color: #fbf4eb;
+    }
+  }
+  @media (hover: hover) {
+    .btn-outline-light:hover {
+      background-color: #26221e;
+      border-color: #26221e;
+      color: #fbf4eb;
+    }
+  }
 }

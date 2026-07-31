@@ -102,7 +102,7 @@ export default function AProposPage() {
       </section>
 
       {/* Formatrice — composition en mosaïque */}
-      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-24">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
           {/* Colonne gauche : titre, texte, puis visuel */}
           <div className="flex flex-col gap-5">
@@ -172,7 +172,7 @@ export default function AProposPage() {
       </section>
 
       {/* Pourquoi Inspire & Impact — bloc coloré + image, puis liste à puces */}
-      <section className="bg-cream-100 py-16 sm:py-24">
+      <section className="bg-cream-100 py-10 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           {/* Bloc orange étroit à gauche, image large à droite */}
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)]">

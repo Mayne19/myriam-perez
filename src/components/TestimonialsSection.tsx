@@ -55,7 +55,7 @@ function Card({ t }: { t: Testimonial }) {
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-cream-100 py-16 sm:py-24">
+    <section className="bg-cream-100 py-10 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="max-w-xl">
           <SplitHeading

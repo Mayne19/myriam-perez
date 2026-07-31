@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 function Group({ title, muted, items }: { title: string; muted: string[]; items: typeof TESTIMONIALS }) {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-16 sm:py-24">
+    <section className="mx-auto max-w-5xl px-6 py-10 sm:py-24">
       <SplitHeading
         as="h2"
         text={title}

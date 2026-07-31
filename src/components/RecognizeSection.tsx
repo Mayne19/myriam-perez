@@ -10,7 +10,7 @@ import { PROGRAM } from "@/data/content";
 */
 export default function RecognizeSection() {
   return (
-    <section data-section-theme="dark" className="bg-espresso-900 py-16 sm:py-24">
+    <section data-section-theme="dark" className="bg-espresso-900 py-10 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         {/* Titre pleine largeur, au-dessus des deux colonnes */}
         <FadeIn>

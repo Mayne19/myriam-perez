@@ -17,11 +17,11 @@ export default function Button({ href, children, variant = "primary", external, 
     variant === "primary"
       ? "bg-accent text-cream-50 hover:bg-accent-dark hover:-translate-y-0.5 hover:text-cream-50"
       : variant === "secondary"
-        ? // Bouton secondaire : vide au repos, rempli en beige au survol,
-          // avec le texte qui bascule en brun foncé. Pour fond sombre.
-          "bg-transparent text-cream-50 border border-cream-50/40 hover:bg-cream-50 hover:border-cream-50 hover:text-espresso-900"
-        : // Contour : même logique que le secondaire, mais pour fond clair.
-          "bg-transparent text-espresso-900 border border-espresso-900/20 hover:bg-espresso-900 hover:border-espresso-900 hover:text-cream-50";
+        ? // Contour, pour fond sombre. Rempli au survol — et déjà rempli sans
+          // survol (tactile), voir `.btn-outline-dark` dans globals.css.
+          "btn-outline-dark"
+        : // Contour, pour fond clair. Même logique, voir `.btn-outline-light`.
+          "btn-outline-light";
 
   return (
     <Link

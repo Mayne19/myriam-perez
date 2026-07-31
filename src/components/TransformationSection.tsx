@@ -12,7 +12,7 @@ import { PROGRAM } from "@/data/content";
 */
 export default function TransformationSection() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+    <section className="mx-auto max-w-6xl px-6 py-10 sm:py-24">
       <FadeIn>
         <SplitHeading
           as="h2"

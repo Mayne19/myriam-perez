@@ -106,7 +106,7 @@ export default function ProgrammePage() {
       <RecognizeSection />
 
       {/* Le problème : l'absence de structure */}
-      <section className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-3xl px-6 py-10 sm:py-24">
         <FadeIn>
           <SplitHeading
             as="h2"
@@ -123,7 +123,7 @@ export default function ProgrammePage() {
 
 
       {/* Méthode Inspire & Impact */}
-      <section className="bg-cream-100 py-16 sm:py-24">
+      <section className="bg-cream-100 py-10 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <FadeIn>
             <SplitHeading
@@ -162,7 +162,7 @@ export default function ProgrammePage() {
 
 
       {/* À qui s'adresse — titre 25 % / mosaïque décalée 75 % */}
-      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-24">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-24">
           {/* Colonne titre — 25 % */}
           <FadeIn className="lg:sticky lg:top-28 lg:self-start">
@@ -208,7 +208,7 @@ export default function ProgrammePage() {
       </section>
 
       {/* Ce programme n'est pas pour vous si */}
-      <section className="mx-auto max-w-3xl px-6 pb-16 sm:pb-24">
+      <section className="mx-auto max-w-3xl px-6 pb-10 sm:pb-24">
         <FadeIn className="rounded-3xl border border-espresso-900/[0.08] bg-cream-100 p-8 sm:p-10">
           <SplitHeading as="h3" text={PROGRAM_DETAIL.notForYou.title} muted={["ce", "pas", "pour", "vous", "si"]} />
           <ul className="mt-6 space-y-3">
@@ -223,7 +223,7 @@ export default function ProgrammePage() {
       </section>
 
       {/* Les 5 formations — grille de cartes, titre intégré dans la première case */}
-      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-24">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {/* Première case : titre + bouton, comme dans la référence */}
           <FadeIn className="flex flex-col justify-center px-2 py-4 sm:px-4">
@@ -292,7 +292,7 @@ export default function ProgrammePage() {
 
 
       {/* Ce que comprend le programme + résultats à la fin */}
-      <section className="bg-cream-100 py-16 sm:py-24">
+      <section className="bg-cream-100 py-10 sm:py-24">
         <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-2 lg:gap-16">
           <div>
             <FadeIn>
@@ -344,7 +344,7 @@ export default function ProgrammePage() {
       </section>
 
       {/* Comment se déroule le programme */}
-      <section data-section-theme="dark" className="bg-espresso-900 py-16 sm:py-24">
+      <section data-section-theme="dark" className="bg-espresso-900 py-10 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <FadeIn>
             <SplitHeading
@@ -428,7 +428,7 @@ export default function ProgrammePage() {
       </section>
 
       {/* Pourquoi maintenant ? */}
-      <section data-section-theme="dark" className="bg-espresso-900 py-16 sm:py-24">
+      <section data-section-theme="dark" className="bg-espresso-900 py-10 sm:py-24">
         <div className="mx-auto max-w-3xl px-6">
           <FadeIn>
             <SplitHeading
@@ -451,7 +451,7 @@ export default function ProgrammePage() {
       </section>
 
       {/* Comparaison : rester au statu quo, ou investir dans le programme */}
-      <section className="mx-auto max-w-5xl px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-5xl px-6 py-10 sm:py-24">
         <FadeIn>
           <SplitHeading
             as="h2"
@@ -509,7 +509,7 @@ export default function ProgrammePage() {
             <div className="mt-8">
               <PaymentDrawer
                 label={PROGRAM.comparison.invest.cta}
-                className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-cream-50/50 px-6 py-3.5 text-sm font-medium text-cream-50 transition-colors duration-300 hover:bg-cream-50 hover:text-accent"
+                className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-cream-50/50 px-6 py-3.5 text-sm font-medium text-cream-50 transition-colors duration-300 [@media(hover:hover)]:hover:bg-cream-50 [@media(hover:hover)]:hover:text-accent [@media(hover:none)]:bg-cream-50 [@media(hover:none)]:text-accent"
               />
             </div>
           </FadeIn>

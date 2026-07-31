@@ -14,7 +14,7 @@ export default function AProposMyriamPage() {
   return (
     <main>
       {/* Pourquoi choisir Inspire & Impact */}
-      <section className="bg-cream-100 py-16 sm:py-24">
+      <section className="bg-cream-100 py-10 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)]">
             <FadeIn

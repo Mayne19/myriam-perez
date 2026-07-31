@@ -129,10 +129,8 @@ export default function Header() {
             <div className="hidden shrink-0 items-center gap-3 lg:flex">
               <Link
                 href="/login"
-                className={`no-underline rounded-full border px-5 py-3 text-sm font-medium transition-colors ${
-                  onDark
-                    ? "border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-espresso-900"
-                    : "border-espresso-900/20 text-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
+                className={`no-underline rounded-full px-5 py-3 text-sm font-medium transition-colors ${
+                  onDark ? "btn-outline-dark" : "btn-outline-light"
                 }`}
               >
                 Connexion
@@ -191,10 +189,8 @@ export default function Header() {
               <div className="mt-4 flex flex-col gap-3 pb-2">
                 <Link
                   href="/login"
-                  className={`no-underline rounded-full border px-5 py-3 text-center text-sm font-medium transition-colors ${
-                    onDark
-                      ? "border-cream-50/40 text-cream-50 hover:bg-cream-50 hover:text-espresso-900"
-                      : "border-espresso-900/20 text-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
+                  className={`no-underline rounded-full px-5 py-3 text-center text-sm font-medium transition-colors ${
+                    onDark ? "btn-outline-dark" : "btn-outline-light"
                   }`}
                 >
                   Connexion

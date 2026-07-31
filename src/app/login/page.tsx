@@ -24,7 +24,14 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
       */}
       <div className="grid w-full max-w-6xl lg:h-[90vh] lg:grid-cols-[35%_65%] lg:gap-6">
         <div className="flex items-center justify-center p-6 md:p-10">
-          <AuthForm initialMode={initialMode} />
+          {/*
+            `key` force React à remonter le formulaire quand `mode` change
+            dans l'URL (lien « Se connecter » / « S'inscrire », ou retour
+            navigateur). Sans ça, Next.js réutilise la même instance et son
+            état interne reste bloqué sur le mode d'origine — le clic ne
+            change rien à l'écran tant qu'on n'a pas rafraîchi la page.
+          */}
+          <AuthForm key={initialMode} initialMode={initialMode} />
         </div>
 
         <LoginTestimonialCarousel />

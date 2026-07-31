@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/login"
-            className="no-underline rounded-full border border-cream-50/40 px-5 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-cream-50 hover:text-espresso-900"
+            className="btn-outline-dark no-underline rounded-full px-5 py-3 text-sm font-medium transition-colors"
           >
             Connexion
           </Link>
