@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 const TRAINER_TILES = [
   {
     Icon: Clock,
-    // Sable doré : nettement plus soutenu que le fond de page, tout en restant
-    // dans la palette (l'orange clair précédent s'y confondait)
-    card: "bg-cream-300",
+    // Même couleur que le fond de la page : la bordure et l'ombre suffisent
+    // à la détacher comme une carte, sans lui donner de teinte propre.
+    card: "border border-espresso-900/[0.06] bg-cream-50 shadow-[0_20px_50px_-26px_rgba(38,34,30,0.3)]",
     iconColor: "text-espresso-700",
     text: "text-espresso-900",
     dark: false,
