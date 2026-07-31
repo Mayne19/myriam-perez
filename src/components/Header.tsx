@@ -96,7 +96,12 @@ export default function Header() {
                 alt="Myriam Perez"
                 className="h-11 w-auto sm:h-12"
               />
-              <span className={`hidden flex-col text-left leading-tight transition-colors duration-300 sm:flex ${textColor}`}>
+              {/* Repliée sur mobile pour laisser de la place au hamburger — mais réaffichée dès que le menu est déplié, comme sur la version bureau. */}
+              <span
+                className={`flex-col text-left leading-tight transition-colors duration-300 ${
+                  mobileOpen ? "flex" : "hidden sm:flex"
+                } ${textColor}`}
+              >
                 <span className="font-bold tracking-tight">Myriam Perez</span>
                 <span className="text-sm font-medium opacity-70">Inspire &amp; Impact</span>
               </span>

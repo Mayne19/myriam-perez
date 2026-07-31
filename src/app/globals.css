@@ -292,25 +292,30 @@
   /*
     Boutons « contour » : transparents au repos, remplis au survol. Sur un
     appareil tactile (téléphone, tablette), il n'y a pas de survol — ce
-    remplissage ne se déclencherait donc jamais. `(hover: hover)` ne cible
-    que les appareils qui savent vraiment survoler ; sur les autres, la
-    couleur pleine s'applique dès le départ, comme si le bouton était déjà
-    survolé.
+    remplissage ne se déclencherait donc jamais : `(hover: none)` l'applique
+    dès le départ, comme si le bouton était déjà survolé.
+
+    `:hover`/`:focus-visible` sont déclarés ici sans condition de média (pas
+    seulement dans `@media (hover: hover)`) : sur Safari iOS, un simple tap
+    déclenche quand même le pseudo-état `:hover` de la page — sans cette
+    règle à spécificité suffisante ((0,2,0), au-dessus du `a:hover` global en
+    (0,1,1)), le texte reprenait la couleur accent définie sur tous les
+    liens du site à ce moment-là, au lieu de rester dans les teintes du
+    bouton.
   */
   .btn-outline-dark {
     background-color: transparent;
     border: 1px solid rgb(251 244 235 / 0.4);
     color: #fbf4eb;
   }
+  .btn-outline-dark:hover,
+  .btn-outline-dark:focus-visible {
+    background-color: #fbf4eb;
+    border-color: #fbf4eb;
+    color: #26221e;
+  }
   @media (hover: none) {
     .btn-outline-dark {
-      background-color: #fbf4eb;
-      border-color: #fbf4eb;
-      color: #26221e;
-    }
-  }
-  @media (hover: hover) {
-    .btn-outline-dark:hover {
       background-color: #fbf4eb;
       border-color: #fbf4eb;
       color: #26221e;
@@ -322,6 +327,12 @@
     border: 1px solid rgb(38 34 30 / 0.2);
     color: #26221e;
   }
+  .btn-outline-light:hover,
+  .btn-outline-light:focus-visible {
+    background-color: #26221e;
+    border-color: #26221e;
+    color: #fbf4eb;
+  }
   @media (hover: none) {
     .btn-outline-light {
       background-color: #26221e;
@@ -329,11 +340,10 @@
       color: #fbf4eb;
     }
   }
-  @media (hover: hover) {
-    .btn-outline-light:hover {
-      background-color: #26221e;
-      border-color: #26221e;
-      color: #fbf4eb;
-    }
+
+  /* Au repos comme rempli, un appui assombrit légèrement le bouton — jamais de changement de teinte. */
+  .btn-outline-dark:active,
+  .btn-outline-light:active {
+    filter: brightness(0.9);
   }
 }
