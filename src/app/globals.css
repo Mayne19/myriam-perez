@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Variables de base du site.
+  Déclarées hors de tout `@layer` : elles priment donc sur le thème shadcn,
+  dont le `:root` est défini dans `@layer base`.
+*/
+:root {
+  /*
+    Sans ceci, un navigateur en mode sombre (OS) applique sa propre palette
+    native aux champs de formulaire — curseur, remplissage automatique — dans
+    un bleu qui n'appartient pas à la palette du site, même quand les
+    couleurs sont déjà fixées à la main. `light` force le rendu natif clair.
+  */
+  color-scheme: light;
+  --background: #fbf4eb;
+  --foreground: #26221e;
+  --accent: #f07020;
+  --accent-dark: #c05a18;
+}
+
+/*
+  Échelle typographique unique du site.
+  Un H1 a la même taille sur toutes les pages, idem pour H2, H3, H4.
+  Les tailles sont fluides : elles s'adaptent à la largeur d'écran tout en
+  restant identiques d'une page à l'autre.
+  Une classe utilitaire (ex. `text-lg`) posée sur un titre reste prioritaire
+  et sert d'exception assumée.
+*/
+@layer base {
+  h1 {
+    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+  /*
+    Anneau de focus universel — un seul design pour tout le site, identique à
+    celui des champs de formulaire (voir `lib/fields.ts` et le champ de
+    l'infolettre) : pas de contour dur, un halo (`box-shadow`) doux autour de
+    l'élément. Seule la couleur change, selon le fond : accent sur fond clair,
+    crème sur fond sombre — en réutilisant `[data-section-theme="dark"]`, déjà
+    posé par le site sur toute section sombre ou orange (le header s'en sert
+    pour inverser ses propres couleurs).
+    Les champs de formulaire ont leur propre `focus:ring-*` (classes
+    Tailwind, `@layer utilities`, déclaré après `@layer base`) : ce filet ne
+    s'applique donc qu'aux éléments qui n'ont pas déjà le leur, sans doublon.
+  */
+  :focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgb(240 112 32 / 0.2);
+  }
+  [data-section-theme="dark"] :focus-visible {
+    border-color: rgb(251 244 235 / 0.4);
+    box-shadow: 0 0 0 2px rgb(251 244 235 / 0.2);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /*
+    Signature des hyperliens, appliquée à tous les liens du site.
+    Le texte reste dans la couleur du paragraphe ; seul le soulignement est
+    coloré (accent, épaisseur 2px, décalé de 3px). Au survol, le texte et le
+    trait passent à un accent atténué (60 %) : le lien « se teinte ».
+    Les liens UI (boutons, navigation, cartes, icônes) sont exemptés avec la
+    classe utilitaire `no-underline`.
+  */
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+    transition: color 0.15s;
+  }
+  a:hover {
+    color: rgb(240 112 32 / 0.6);
+    text-decoration-color: rgb(240 112 32 / 0.6);
+  }
+}
+
+/*
+  Couleur d'accent définie en CSS pur.
+  Le token Tailwind `accent` n'est pas toujours régénéré à chaud après une
+  modification de tailwind.config.ts ; ces règles garantissent que l'orange
+  s'applique dans tous les cas.
+*/
+.bg-accent {
+  background-color: var(--accent);
+}
+.hover\:bg-accent-dark:hover {
+  background-color: var(--accent-dark);
+}
+.text-accent {
+  color: var(--accent);
+}
+.hover\:text-accent:hover,
+.group:hover .group-hover\:text-accent {
+  color: var(--accent);
+}
+.border-accent,
+.focus\:border-accent:focus {
+  border-color: var(--accent);
+}
+.bg-accent\/5 {
+  background-color: rgb(240 112 32 / 0.05);
+}
+.bg-accent\/10 {
+  background-color: rgb(240 112 32 / 0.1);
+}
+.border-accent\/30 {
+  border-color: rgb(240 112 32 / 0.3);
+}
+.hover\:border-accent\/40:hover {
+  border-color: rgb(240 112 32 / 0.4);
+}
+
+/* Variantes de survol et de groupe — indispensables tant que le token
+   Tailwind `accent` n'est pas régénéré */
+.hover\:bg-accent:hover,
+.group:hover .group-hover\:bg-accent {
+  background-color: var(--accent);
+}
+.hover\:border-accent:hover,
+.group:hover .group-hover\:border-accent {
+  border-color: var(--accent);
+}
+.group:hover .group-hover\:text-accent {
+  color: var(--accent);
+}
+.bg-accent-bg {
+  background-color: #ffecd8;
+}
+.bg-accent-dark {
+  background-color: var(--accent-dark);
+}
+.text-accent-text {
+  color: #b84000;
+}
+
+/*
+  Défilement continu des témoignages, de droite à gauche.
+  La liste est dupliquée à l'identique et la piste se translate de -50 % :
+  au moment où la première copie sort à gauche, la seconde occupe déjà sa
+  place, donc la boucle est invisible — ni début ni fin perceptibles.
+  L'écart entre les cartes est porté par une marge sur chaque carte (et non
+  par `gap`) afin que -50 % corresponde exactement à une copie.
+*/
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+  /*
+    `overflow: hidden` découpe aussi l'ombre portée des cartes, ce qui dessine
+    un trait horizontal net sous la bande. Ce rembourrage vertical agrandit la
+    zone de découpe : l'ombre s'y développe entièrement au lieu d'être coupée.
+  */
+  padding-top: 0.75rem;
+  padding-bottom: 2.5rem;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 80s linear infinite;
+}
+
+/* Pause au survol, pour laisser le temps de lire */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
+}
+
+/*
+  Animations d'apparition.
+  L'état final (visible) est l'état par défaut : si le CSS ou le JS ne se charge
+  pas, le contenu reste lisible. L'animation ne fait qu'embellir par-dessus.
+*/
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .reveal {
+    animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .reveal-scale {
+    animation: reveal-scale 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .reveal-d1 {
+    animation-delay: 0.1s;
+  }
+  .reveal-d2 {
+    animation-delay: 0.2s;
+  }
+  .reveal-d3 {
+    animation-delay: 0.3s;
+  }
+  .reveal-d4 {
+    animation-delay: 0.4s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .reveal-scale {
+      animation: none;
+    }
+  }
+
+  /*
+    Le sujet du PNG est coupé net sur la dernière ligne de pixels : sans
+    traitement, le bas de la photo se termine par un trait horizontal visible.
+    Ce dégradé fait disparaître progressivement les derniers pourcents de
+    l'image dans le fond sombre du bloc.
+  */
+  .photo-fade-bottom {
+    -webkit-mask-image: linear-gradient(to bottom, black 94%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 94%, transparent 100%);
+  }
+
+  /*
+    Photo de la page À propos : la marge transparente du PNG (au-dessus des
+    cheveux) est fondue dans le fond sombre par ce dégradé, mais SEULEMENT
+    en haut. Le bas de la photo (le chemisier, jusqu'au bord du cadrage)
+    reste à 100 % opaque afin de toucher réellement le bas du bloc — jamais
+    de fondu ni d'espace vide sous la photo.
+  */
+  .portrait-fade {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 16%);
+  }
+}
