@@ -269,12 +269,14 @@
   /*
     Le sujet du PNG est coupé net sur la dernière ligne de pixels : sans
     traitement, le bas de la photo se termine par un trait horizontal visible.
-    Ce dégradé fait disparaître progressivement les derniers pourcents de
-    l'image dans le fond sombre du bloc.
+    Une zone de fondu trop haute (6 % testés) se voit elle-même comme un
+    dégradé gris appuyé, puisqu'elle éteint un blanc (le chemisier) vers le
+    fond sombre : ici la zone est réduite au minimum qui évite encore le
+    trait nettement visible, sans créer de bande grise perceptible.
   */
   .photo-fade-bottom {
-    -webkit-mask-image: linear-gradient(to bottom, black 94%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 99%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 99%, transparent 100%);
   }
 
   /*
