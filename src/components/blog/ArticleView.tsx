@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  Link as LinkIcon,
   Check,
   Copy,
   ThumbsUp,
@@ -15,16 +14,11 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Article } from "@/data/articles";
-import {
-  parseArticleBlocks,
-  renderInline,
-  resolveEmbedUrl,
-  formatArticleDate,
-} from "@/lib/blog-format";
+import { formatArticleDate } from "@/lib/blog-format";
+import { buildArticleBody } from "@/lib/article-html";
 import Accordion from "@/components/Accordion";
 import ArticleCard from "@/components/blog/ArticleCard";
 import NewsletterBanner from "@/components/blog/NewsletterBanner";
-import Button from "@/components/Button";
 import SplitHeading from "@/components/SplitHeading";
 import { PROGRAM } from "@/data/content";
 
@@ -33,31 +27,37 @@ type ArticleViewProps = {
   related: Article[];
 };
 
-const CALLOUT_VARIANTS = {
-  tip: { label: "Conseil", box: "border-accent/40 bg-accent/[0.08] text-espresso-800", badge: "bg-accent" },
-  info: { label: "À noter", box: "border-espresso-900/15 bg-espresso-900/[0.06] text-espresso-700", badge: "bg-espresso-700" },
-  warning: { label: "Attention", box: "border-gold-500/40 bg-gold-500/[0.12] text-espresso-800", badge: "bg-gold-500" },
-  danger: { label: "Important", box: "border-red-400/50 bg-red-500/[0.08] text-red-900", badge: "bg-red-500" },
-} as const;
-
 export default function ArticleView({ article, related }: ArticleViewProps) {
-  const blocks = useMemo(() => parseArticleBlocks(article.content), [article.content]);
-  const headings = useMemo(
-    () =>
-      blocks
-        .filter((b): b is { type: "h2" | "h3"; text: string; id: string } => b.type === "h2" || b.type === "h3")
-        .map((b) => ({ id: b.id, text: b.text, level: b.type === "h3" ? 3 : 2 })),
-    [blocks],
+  const { html, faq, headings } = useMemo(
+    () => buildArticleBody(article.content, article.faq ?? null),
+    [article.content, article.faq],
   );
-  const faqItems = useMemo(
-    () => blocks.flatMap((b) => (b.type === "faq" ? b.items : [])),
-    [blocks],
-  );
+  const bodyRef = useRef<HTMLDivElement>(null);
   const [activeHeading, setActiveHeading] = useState("");
-  const [copiedAnchor, setCopiedAnchor] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
-  const [copiedCode, setCopiedCode] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  // Boutons « copier » sur chaque bloc de code, ajoutés côté client.
+  useEffect(() => {
+    const root = bodyRef.current;
+    if (!root) return;
+    const pres = root.querySelectorAll("pre");
+    pres.forEach((pre) => {
+      if (pre.querySelector(".copy-code")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "copy-code";
+      button.textContent = "Copier";
+      button.addEventListener("click", () => {
+        const code = pre.querySelector("code");
+        if (!code) return;
+        navigator.clipboard.writeText(code.textContent ?? "");
+        button.textContent = "Copié";
+        setTimeout(() => (button.textContent = "Copier"), 2000);
+      });
+      pre.appendChild(button);
+    });
+  }, [html]);
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -79,23 +79,10 @@ export default function ArticleView({ article, related }: ArticleViewProps) {
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
   const enc = encodeURIComponent;
 
-  function copyAnchor(id: string) {
-    const url = `${window.location.origin}${window.location.pathname}#${id}`;
-    navigator.clipboard.writeText(url);
-    setCopiedAnchor(id);
-    setTimeout(() => setCopiedAnchor(null), 2000);
-  }
-
   function copyPageLink() {
     navigator.clipboard.writeText(shareUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
-  }
-
-  function copyCode(index: number, text: string) {
-    navigator.clipboard.writeText(text);
-    setCopiedCode(index);
-    setTimeout(() => setCopiedCode(null), 2000);
   }
 
   return (
@@ -181,6 +168,7 @@ export default function ArticleView({ article, related }: ArticleViewProps) {
             </header>
 
             {article.coverImageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={article.coverImageUrl}
                 alt={article.title}
@@ -194,193 +182,7 @@ export default function ArticleView({ article, related }: ArticleViewProps) {
               </div>
             )}
 
-            <div className="mt-8 space-y-6 text-espresso-600">
-              {blocks.map((block, i) => {
-                switch (block.type) {
-                  case "h2":
-                  case "h3":
-                  case "h4": {
-                    const Tag = block.type;
-                    return (
-                      <Tag
-                        key={i}
-                        id={block.id}
-                        className="group relative scroll-mt-28 text-espresso-900"
-                      >
-                        {block.text}
-                        <a
-                          href={`#${block.id}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            copyAnchor(block.id);
-                          }}
-                          aria-label={`Lien vers la section ${block.text}`}
-                          className="no-underline ml-2 inline-flex translate-y-[-2px] items-center opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                          {copiedAnchor === block.id ? (
-                            <Check className="h-4 w-4 text-accent" />
-                          ) : (
-                            <LinkIcon className="h-4 w-4 text-espresso-300 hover:text-accent" />
-                          )}
-                        </a>
-                      </Tag>
-                    );
-                  }
-                  case "h5":
-                    return (
-                      <h5 key={i} id={block.id} className="scroll-mt-28 font-semibold uppercase tracking-wide text-espresso-400">
-                        {block.text}
-                      </h5>
-                    );
-                  case "p":
-                    return <p key={i}>{renderInline(block.text)}</p>;
-                  case "blockquote":
-                    return (
-                      // `overflow-hidden` contient le grand guillemet d\u00E9coratif \u00E0 l'int\u00E9rieur
-                      // du bloc quelle que soit la longueur du texte : sur une citation d'une
-                      // seule ligne, le bas du guillemet se fait simplement rogner par le bord
-                      // arrondi au lieu de d\u00E9border. Le bloc garde la hauteur de son contenu \u2014
-                      // jamais agrandi artificiellement, jamais d'espace vide.
-                      <blockquote
-                        key={i}
-                        className="relative my-8 overflow-hidden rounded-2xl bg-accent/[0.08] py-6 pl-[clamp(132px,16%,168px)] pr-7 text-lg font-medium italic leading-relaxed text-espresso-500 max-[860px]:px-5 max-[860px]:py-[18px]"
-                      >
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute left-7 top-6 select-none rotate-[8deg] font-serif text-[160px] leading-[0.8] text-accent opacity-10"
-                        >
-                          {"\u275E"}
-                        </span>
-                        {block.text}
-                      </blockquote>
-                    );
-                  case "callout": {
-                    const variant = CALLOUT_VARIANTS[block.variant];
-                    return (
-                      <div key={i} className={`relative my-8 rounded-2xl border px-6 py-5 ${variant.box}`}>
-                        <span className={`absolute -top-3 left-4 rounded-full px-3 py-1 text-xs font-semibold text-cream-50 ${variant.badge}`}>
-                          {variant.label}
-                        </span>
-                        <p className="text-lg leading-relaxed">{block.text}</p>
-                      </div>
-                    );
-                  }
-                  case "ul":
-                    return (
-                      <ul key={i} className="my-5 ml-4 list-disc space-y-2 pl-6 marker:text-accent">
-                        {block.items.map((item, j) => (
-                          <li key={j}>{renderInline(item)}</li>
-                        ))}
-                      </ul>
-                    );
-                  case "ol":
-                    return (
-                      <ol key={i} className="my-5 ml-4 list-decimal space-y-2 pl-6 marker:font-medium marker:text-accent">
-                        {block.items.map((item, j) => (
-                          <li key={j}>{renderInline(item)}</li>
-                        ))}
-                      </ol>
-                    );
-                  case "code":
-                    return (
-                      <div key={i} data-section-theme="dark" className="my-8 overflow-hidden rounded-2xl bg-espresso-900">
-                        <div className="flex items-center justify-between border-b border-cream-50/10 px-5 py-3">
-                          <span className="font-mono text-xs uppercase tracking-wider text-cream-50/40">
-                            {block.lang}
-                          </span>
-                          <button
-                            onClick={() => copyCode(i, block.text)}
-                            className="flex items-center gap-1.5 text-xs text-cream-50/40 transition-colors hover:text-cream-50"
-                          >
-                            {copiedCode === i ? (
-                              <>
-                                <Check className="h-3.5 w-3.5" /> Copié
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="h-3.5 w-3.5" /> Copier
-                              </>
-                            )}
-                          </button>
-                        </div>
-                        <pre className="overflow-x-auto p-5">
-                          <code className="font-mono text-sm leading-relaxed text-cream-100">{block.text}</code>
-                        </pre>
-                      </div>
-                    );
-                  case "table":
-                    return (
-                      <div key={i} className="my-8 overflow-x-auto rounded-2xl border border-espresso-900/10">
-                        <table className="w-full min-w-[520px] border-collapse text-left text-base">
-                          <thead>
-                            <tr className="bg-cream-100">
-                              {block.headers.map((h, j) => (
-                                <th key={j} className="px-5 py-3 text-sm font-semibold text-espresso-700">
-                                  {h}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {block.rows.map((row, j) => (
-                              <tr key={j} className={j % 2 ? "bg-cream-50/60" : ""}>
-                                {row.map((cell, k) => (
-                                  <td key={k} className="border-t border-espresso-900/10 px-5 py-3 text-espresso-600">
-                                    {cell}
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    );
-                  case "image":
-                    return (
-                      <figure key={i} className="my-8">
-                        <img src={block.src} alt={block.alt} className="w-full rounded-3xl" />
-                        {(block.caption || block.alt) && (
-                          <figcaption className="mt-2 text-center text-sm text-espresso-400">
-                            {block.caption && <span className="italic">{block.caption}</span>}
-                            {block.caption && block.alt && <span aria-hidden> · </span>}
-                            {block.alt && <span>Source : {block.alt}</span>}
-                          </figcaption>
-                        )}
-                      </figure>
-                    );
-                  case "embed": {
-                    const { url, type } = resolveEmbedUrl(block.src);
-                    const isTall = type === "tweet" || type === "reddit";
-                    const isPodcast = type === "podcast";
-                    return (
-                      <div
-                        key={i}
-                        className={`my-8 overflow-hidden rounded-2xl ${isTall ? "" : "aspect-video"}`}
-                      >
-                        <iframe
-                          src={url}
-                          title="Contenu intégré"
-                          allowFullScreen
-                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
-                          className="h-full w-full border-0"
-                          style={isPodcast ? { height: 152 } : isTall ? { height: 500 } : undefined}
-                        />
-                      </div>
-                    );
-                  }
-                  case "cta":
-                    return (
-                      <div key={i} className="flex justify-center pt-2">
-                        <Button href={block.href} external={block.href.startsWith("http")}>
-                          {block.label}
-                        </Button>
-                      </div>
-                    );
-                  default:
-                    return null;
-                }
-              })}
-            </div>
+            <div ref={bodyRef} className="article-body mt-8" dangerouslySetInnerHTML={{ __html: html }} />
 
             {/* Retour sur l'article — sobre mais avec un fond qui se distingue vraiment de la page */}
             <section className="mt-12 rounded-3xl border border-espresso-900/[0.08] bg-cream-200 px-6 py-10 text-center">
@@ -469,8 +271,9 @@ export default function ArticleView({ article, related }: ArticleViewProps) {
           </aside>
         </div>
 
+        {/* FAQ — en fin d'article */}
         {/* FAQ */}
-        {faqItems.length > 0 && (
+        {faq.length > 0 && (
           <section className="py-16">
             <div className="grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] lg:gap-16">
               <div>
@@ -479,7 +282,7 @@ export default function ArticleView({ article, related }: ArticleViewProps) {
                   Réponses claires aux questions fréquentes sur ce sujet.
                 </p>
               </div>
-              <Accordion items={faqItems} />
+              <Accordion items={faq.map((f) => ({ q: f.question, a: f.answer }))} />
             </div>
           </section>
         )}

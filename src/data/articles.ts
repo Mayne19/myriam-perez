@@ -21,6 +21,8 @@ export type Article = {
   coverImageUrl?: string | null;
   tags: string[];
   featured?: boolean;
+  /** Entrées FAQ stockées à part (articles rédigés dans l'éditeur admin). */
+  faq?: { question: string; answer: string }[];
 };
 
 export const BLOG_CATEGORIES = [

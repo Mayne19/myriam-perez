@@ -8,6 +8,17 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { SEED_ARTICLES, type Article } from "@/data/articles";
+import { parseFaqJson, adminArticleToArticle } from "@/lib/article-html";
+import { isSupabaseConfigured } from "@/lib/demo";
+import { getMockArticles } from "@/lib/mock/data";
+
+function publishedMockArticles(): Article[] {
+  const now = new Date().toISOString();
+  return getMockArticles()
+    .filter((a) => a.publishedAt && a.publishedAt <= now)
+    .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""))
+    .map(adminArticleToArticle);
+}
 
 type ArticleRow = {
   id: string;
@@ -22,6 +33,7 @@ type ArticleRow = {
   cover_image_url: string | null;
   tags: string[] | null;
   featured: boolean | null;
+  faq_json: unknown;
 };
 
 function mapRow(row: ArticleRow): Article {
@@ -38,15 +50,25 @@ function mapRow(row: ArticleRow): Article {
     coverImageUrl: row.cover_image_url,
     tags: row.tags ?? [],
     featured: row.featured ?? false,
+    faq: parseFaqJson(row.faq_json),
   };
 }
 
 export async function getAllArticles(): Promise<Article[]> {
+  if (!isSupabaseConfigured()) {
+    const mock = publishedMockArticles();
+    return mock.length > 0 ? mock : SEED_ARTICLES;
+  }
+
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("articles")
+      // Un article créé par l'éditeur admin sans date de publication (ou
+      // programmé dans le futur) reste un brouillon : invisible ici.
       .select("*")
+      .not("published_at", "is", null)
+      .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false });
     if (error) throw error;
     if (!data || data.length === 0) return SEED_ARTICLES;
@@ -57,12 +79,18 @@ export async function getAllArticles(): Promise<Article[]> {
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  if (!isSupabaseConfigured()) {
+    return publishedMockArticles().find((a) => a.slug === slug) ?? SEED_ARTICLES.find((a) => a.slug === slug) ?? null;
+  }
+
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("articles")
       .select("*")
       .eq("slug", slug)
+      .not("published_at", "is", null)
+      .lte("published_at", new Date().toISOString())
       .maybeSingle();
     if (error) throw error;
     if (data) return mapRow(data as ArticleRow);

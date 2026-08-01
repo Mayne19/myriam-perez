@@ -88,7 +88,8 @@ export default function AuthForm({ onAuthenticated, initialMode = "signup" }: Au
     if (onAuthenticated) {
       onAuthenticated();
     } else {
-      router.push("/");
+      // /espace redirige lui-même vers /admin si le compte est admin/éditeur.
+      router.push("/espace");
       router.refresh();
     }
   }

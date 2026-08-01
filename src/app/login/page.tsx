@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import AuthForm from "@/components/AuthForm";
 import LoginTestimonialCarousel from "@/components/LoginTestimonialCarousel";
+import { isSupabaseConfigured } from "@/lib/demo";
 
 export const metadata: Metadata = {
   title: "Connexion | Myriam Perez — Inspire & Impact",
@@ -23,7 +25,7 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
         deux dans 90 % de l'écran empilés l'un sur l'autre.
       */}
       <div className="grid w-full max-w-6xl lg:h-[90vh] lg:grid-cols-[35%_65%] lg:gap-6">
-        <div className="flex items-center justify-center p-6 md:p-10">
+        <div className="flex flex-col items-center justify-center p-6 md:p-10">
           {/*
             `key` force React à remonter le formulaire quand `mode` change
             dans l'URL (lien « Se connecter » / « S'inscrire », ou retour
@@ -32,6 +34,15 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
             change rien à l'écran tant qu'on n'a pas rafraîchi la page.
           */}
           <AuthForm key={initialMode} initialMode={initialMode} />
+
+          {!isSupabaseConfigured() && (
+            <p className="mt-6 text-center text-sm text-espresso-400">
+              Supabase n&apos;est pas encore connecté.{" "}
+              <Link href="/demo" className="font-medium text-espresso-700 hover:text-accent">
+                Essayer en mode démo
+              </Link>
+            </p>
+          )}
         </div>
 
         <LoginTestimonialCarousel />
