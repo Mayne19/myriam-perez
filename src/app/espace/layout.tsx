@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { isSupabaseConfigured } from "@/lib/demo";
 import EspaceNav from "@/components/espace/EspaceNav";
-import DemoBanner from "@/components/DemoBanner";
 
 /*
   Layout du groupe /espace (dashboard apprenant). Réservé aux comptes de
@@ -18,7 +17,6 @@ export default async function EspaceLayout({ children }: { children: React.React
 
   return (
     <div className="min-h-svh bg-cream-50">
-      {demoMode && <DemoBanner />}
       <EspaceNav fullName={profile.full_name} demoMode={demoMode} />
       <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
     </div>

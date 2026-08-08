@@ -18,6 +18,8 @@ export type AdminArticle = {
   /** `null` = brouillon, non visible sur le blog public (voir src/lib/blog.ts). */
   publishedAt: string | null;
   faq: FaqItem[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 type ArticleRow = {
@@ -34,6 +36,8 @@ type ArticleRow = {
   author_name: string | null;
   published_at: string | null;
   faq_json: unknown;
+  created_at: string;
+  updated_at: string;
 };
 
 function mapRow(row: ArticleRow): AdminArticle {
@@ -51,6 +55,8 @@ function mapRow(row: ArticleRow): AdminArticle {
     authorName: row.author_name ?? "Myriam Perez",
     publishedAt: row.published_at,
     faq: parseFaqJson(row.faq_json),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
   };
 }
 

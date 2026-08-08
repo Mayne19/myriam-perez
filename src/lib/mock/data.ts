@@ -182,6 +182,8 @@ function seedStore(): StoreShape {
       authorName: a.author,
       publishedAt: a.publishedAt,
       faq: [],
+      createdAt: a.publishedAt ?? new Date().toISOString(),
+      updatedAt: a.publishedAt ?? new Date().toISOString(),
     })),
     invitations: [{ id: "invit-1", email: "camille@exemple.com", role: "editor", status: "pending", createdAt: "2026-07-15" }],
     categories: SEED_CATEGORIES,
@@ -207,6 +209,12 @@ function readStore(): StoreShape {
     const parsed = JSON.parse(fs.readFileSync(STORE_PATH, "utf-8")) as StoreShape;
     // Migration des stores créés avant les catégories (mode démo).
     if (!Array.isArray(parsed.categories)) parsed.categories = SEED_CATEGORIES;
+    // Migration des stores créés avant createdAt/updatedAt sur les articles.
+    parsed.articles = parsed.articles.map((a) => ({
+      ...a,
+      createdAt: a.createdAt ?? a.publishedAt ?? new Date().toISOString(),
+      updatedAt: a.updatedAt ?? a.publishedAt ?? new Date().toISOString(),
+    }));
     return parsed;
   } catch {
     const seeded = seedStore();
@@ -245,7 +253,8 @@ export function getMockArticle(id: string): AdminArticle | null {
 export function createMockArticle(input: ArticleInput): string {
   const store = readStore();
   const id = `mock-art-${Date.now()}`;
-  store.articles.unshift({ id, ...articleInputToStore(input) });
+  const now = new Date().toISOString();
+  store.articles.unshift({ id, ...articleInputToStore(input), createdAt: now, updatedAt: now });
   writeStore(store);
   return id;
 }
@@ -254,11 +263,12 @@ export function updateMockArticle(id: string, input: ArticleInput) {
   const store = readStore();
   const index = store.articles.findIndex((a) => a.id === id);
   if (index === -1) return;
-  store.articles[index] = { id, ...articleInputToStore(input) };
+  const createdAt = store.articles[index].createdAt ?? new Date().toISOString();
+  store.articles[index] = { id, ...articleInputToStore(input), createdAt, updatedAt: new Date().toISOString() };
   writeStore(store);
 }
 
-function articleInputToStore(input: ArticleInput): Omit<AdminArticle, "id"> {
+function articleInputToStore(input: ArticleInput): Omit<AdminArticle, "id" | "createdAt" | "updatedAt"> {
   return {
     slug: input.slug,
     title: input.title,

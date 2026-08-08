@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Plus } from "lucide-react";
 import { getAllArticlesForAdmin } from "@/lib/admin/articles";
+import { getAllCategories } from "@/lib/admin/categories";
 import AdminBlogDashboard from "@/components/admin/AdminBlogDashboard";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminBlogPage() {
-  const articles = await getAllArticlesForAdmin();
+  const [articles, categories] = await Promise.all([getAllArticlesForAdmin(), getAllCategories()]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -23,7 +24,7 @@ export default async function AdminBlogPage() {
         </Link>
       </div>
 
-      <AdminBlogDashboard articles={articles} />
+      <AdminBlogDashboard articles={articles} categories={categories} />
     </div>
   );
 }

@@ -1,31 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { exitDemo } from "@/app/demo/actions";
+import { usePathname } from "next/navigation";
+import { CreditCard, GraduationCap, HelpCircle, Settings, User } from "lucide-react";
+import ProfileMenu, { type ProfileMenuItem } from "@/components/ProfileMenu";
 
 const LINKS = [
   { label: "Mes formations", href: "/espace" },
   { label: "Profil", href: "/espace/profil" },
 ];
 
+const PROFILE_MENU_ITEMS: ProfileMenuItem[] = [
+  { label: "Mon profil", href: "/espace/profil", icon: User },
+  { label: "Mes formations", href: "/espace", icon: GraduationCap },
+  { label: "Abonnement", href: "/espace/abonnement", icon: CreditCard },
+  { label: "Aide & support", href: "/espace/aide", icon: HelpCircle },
+  { label: "Paramètres", href: "/espace/profil", icon: Settings },
+];
+
 export default function EspaceNav({ fullName, demoMode = false }: { fullName: string | null; demoMode?: boolean }) {
   const pathname = usePathname();
-  const router = useRouter();
-
-  async function handleLogout() {
-    if (!confirm("Se déconnecter ?")) return;
-    if (demoMode) {
-      await exitDemo();
-      return;
-    }
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/login?mode=login");
-    router.refresh();
-  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-espresso-900/10 bg-cream-50/95 backdrop-blur-md">
@@ -56,17 +50,7 @@ export default function EspaceNav({ fullName, demoMode = false }: { fullName: st
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
-          {fullName && <span className="hidden text-sm text-espresso-500 md:inline">{fullName}</span>}
-          <button
-            type="button"
-            onClick={handleLogout}
-            aria-label="Se déconnecter"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-espresso-900/15 text-espresso-700 transition-colors hover:border-accent/40 hover:text-accent"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
-        </div>
+        <ProfileMenu fullName={fullName} items={PROFILE_MENU_ITEMS} demoMode={demoMode} />
       </div>
     </header>
   );

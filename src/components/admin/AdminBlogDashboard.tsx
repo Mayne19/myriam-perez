@@ -7,27 +7,30 @@ import { Eye, EyeOff, Trash2 } from "lucide-react";
 import { formatArticleDate } from "@/lib/blog-format";
 import { deleteArticleAction, togglePublishAction } from "@/app/admin/blog/actions";
 import type { AdminArticle } from "@/lib/admin/articles";
+import type { BlogCategory } from "@/lib/admin/categories";
 
-type Filter = "all" | "published" | "draft";
+type StatusFilter = "all" | "published" | "draft";
 
-const FILTERS: { value: Filter; label: string }[] = [
+const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "Tous" },
   { value: "published", label: "Publiés" },
   { value: "draft", label: "Brouillons" },
 ];
 
-export default function AdminBlogDashboard({ articles }: { articles: AdminArticle[] }) {
+export default function AdminBlogDashboard({ articles, categories }: { articles: AdminArticle[]; categories: BlogCategory[] }) {
   const router = useRouter();
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<StatusFilter>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const filtered = articles.filter((article) => {
-    if (filter === "published") return Boolean(article.publishedAt);
-    if (filter === "draft") return !article.publishedAt;
+    if (filter === "published" && !article.publishedAt) return false;
+    if (filter === "draft" && article.publishedAt) return false;
+    if (categoryFilter !== "all" && article.category !== categoryFilter) return false;
     return true;
   });
 
-  const count = (value: Filter) =>
+  const count = (value: StatusFilter) =>
     value === "all" ? articles.length : articles.filter((a) => (value === "published" ? Boolean(a.publishedAt) : !a.publishedAt)).length;
 
   async function handleToggle(article: AdminArticle) {
@@ -47,8 +50,8 @@ export default function AdminBlogDashboard({ articles }: { articles: AdminArticl
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => (
+      <div className="flex flex-wrap items-center gap-2">
+        {STATUS_FILTERS.map((f) => (
           <button
             key={f.value}
             type="button"
@@ -63,6 +66,19 @@ export default function AdminBlogDashboard({ articles }: { articles: AdminArticl
             <span className={`ml-1.5 text-xs ${filter === f.value ? "text-cream-50/70" : "text-espresso-300"}`}>{count(f.value)}</span>
           </button>
         ))}
+
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="rounded-full border border-espresso-900/15 bg-white px-4 py-2 text-sm font-medium text-espresso-600 outline-none focus:border-accent"
+        >
+          <option value="all">Toutes les catégories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {filtered.length === 0 ? (
@@ -75,11 +91,13 @@ export default function AdminBlogDashboard({ articles }: { articles: AdminArticl
         </p>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-espresso-900/10 bg-white">
-          <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[820px] border-collapse text-left text-sm">
             <thead>
               <tr className="bg-cream-100">
+                <th className="px-5 py-3 font-semibold text-espresso-700"></th>
                 <th className="px-5 py-3 font-semibold text-espresso-700">Titre</th>
                 <th className="px-5 py-3 font-semibold text-espresso-700">Catégorie</th>
+                <th className="px-5 py-3 font-semibold text-espresso-700">Modifié le</th>
                 <th className="px-5 py-3 font-semibold text-espresso-700">Date</th>
                 <th className="px-5 py-3 font-semibold text-espresso-700">Statut</th>
                 <th className="px-5 py-3 font-semibold text-espresso-700">Actions</th>
@@ -89,11 +107,20 @@ export default function AdminBlogDashboard({ articles }: { articles: AdminArticl
               {filtered.map((article) => (
                 <tr key={article.id} className="border-t border-espresso-900/10">
                   <td className="px-5 py-3">
-                    <Link href={`/admin/blog/${article.id}`} className="font-medium text-espresso-900 hover:text-accent">
+                    {article.coverImageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={article.coverImageUrl} alt="" className="h-10 w-14 rounded-lg object-cover" />
+                    ) : (
+                      <div className="h-10 w-14 rounded-lg bg-accent-bg" />
+                    )}
+                  </td>
+                  <td className="px-5 py-3">
+                    <Link href={`/admin/blog/${article.id}`} className="no-underline font-medium text-espresso-900 hover:text-accent">
                       {article.title || "(sans titre)"}
                     </Link>
                   </td>
                   <td className="px-5 py-3 text-espresso-600">{article.category || "—"}</td>
+                  <td className="px-5 py-3 text-espresso-600">{formatArticleDate(article.updatedAt)}</td>
                   <td className="px-5 py-3 text-espresso-600">
                     {article.publishedAt ? formatArticleDate(article.publishedAt) : ""}
                   </td>
