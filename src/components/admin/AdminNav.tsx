@@ -20,58 +20,36 @@ const ALL_LINKS = [
 
 type NavLink = (typeof ALL_LINKS)[number];
 
-function CircleLink({ link, active }: { link: NavLink; active: boolean }) {
+function RailLink({ link, active }: { link: NavLink; active: boolean }) {
   const Icon = link.icon;
   return (
     <Link
       href={link.href}
       title={link.label}
-      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full no-underline transition-colors ${
+      className={`flex h-11 items-center gap-3 overflow-hidden whitespace-nowrap rounded-full px-3.5 no-underline transition-colors ${
         active ? "bg-accent text-cream-50" : "text-espresso-600 hover:bg-cream-100"
       }`}
     >
-      <Icon className="h-[18px] w-[18px]" />
-    </Link>
-  );
-}
-
-function RowLink({ link, active }: { link: NavLink; active: boolean }) {
-  const Icon = link.icon;
-  return (
-    <Link
-      href={link.href}
-      className={`flex items-center gap-3 whitespace-nowrap rounded-full px-3 py-2.5 text-sm font-medium no-underline transition-colors ${
-        active ? "bg-accent text-cream-50" : "text-espresso-700 hover:bg-cream-100"
-      }`}
-    >
-      <Icon className="h-4 w-4 shrink-0" />
-      {link.label}
+      <Icon className="h-[18px] w-[18px] shrink-0" />
+      <span className="text-sm font-medium opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-150">
+        {link.label}
+      </span>
     </Link>
   );
 }
 
 /*
-  Rail flottant à deux visages qui partagent le même conteneur (largeur
-  animée de 64 à 256px, le reste suit en `absolute inset-0`) :
-  - Au repos : icônes seules, réparties en 3 capsules qui regroupent ce qui
-    va ensemble — vue d'ensemble/business (Dashboard, Formations,
-    Apprenants, Abonnements), éditorial (Articles, Catégories), compte
-    (Paramètres, Déconnexion).
-  - Au survol : bascule (fondu) vers un panneau unique qui révèle les
-    libellés, avec les mêmes regroupements (un peu d'air entre chaque bloc).
-    Le survol NE superpose pas le contenu : `AdminLayout` observe la même
-    classe `group` via un sélecteur miroir sur `<main>` pour réduire sa
-    largeur en même temps (voir layout.tsx) — les deux se partagent la page.
+  Rail flottant ancré à un point fixe (left-4, top-28) qui ne se déplace
+  JAMAIS pendant le survol — seule sa largeur s'étend (comme un bras qui se
+  tend), exactement comme au repos. Pour garantir zéro "rebond" :
+  - Une seule couche de contenu (pas de cross-fade opacity entre deux vues,
+    qui provoquait un reflow temporaire de largeur avant que `width` ait
+    fini sa transition). Les icônes restent toujours montées ; seuls les
+    libellés apparaissent/disparaissent (fondu très rapide, sans affecter
+    la largeur puisqu'ils sont dans un conteneur `overflow-hidden`).
+  - `AdminLayout` mire la même transition sur `<main>` via `peer-hover/nav`.
 */
-export default function AdminNav({
-  role,
-  fullName,
-  demoMode = false,
-}: {
-  role: "admin" | "editor";
-  fullName: string | null;
-  demoMode?: boolean;
-}) {
+export default function AdminNav({ role, demoMode = false }: { role: "admin" | "editor"; fullName: string | null; demoMode?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const links = ALL_LINKS.filter((l) => (l.roles as readonly string[]).includes(role));
@@ -94,73 +72,39 @@ export default function AdminNav({
   }
 
   return (
-    <div className="peer/nav group fixed left-4 top-4 bottom-4 z-30 w-16 transition-[width] duration-500 ease-in-out hover:w-64">
-      {/* Repos : capsules séparées, icônes seules */}
-      <div className="absolute inset-0 flex flex-col items-center justify-between opacity-100 transition-opacity duration-300 group-hover:pointer-events-none group-hover:opacity-0">
-        <div className="flex flex-col items-center gap-3">
+    <div className="peer/nav group fixed left-4 top-28 bottom-4 z-30 w-16 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 hover:w-56 hover:delay-0">
+      <div className="flex h-full flex-col items-stretch justify-between">
+        <div className="flex flex-col items-stretch gap-3">
           {group1.length > 0 && (
-            <div className="flex flex-col items-center gap-1 rounded-full bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
+            <nav className="flex flex-col gap-1 overflow-hidden rounded-[24px] bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
               {group1.map((link) => (
-                <CircleLink key={link.href} link={link} active={isActive(link)} />
+                <RailLink key={link.href} link={link} active={isActive(link)} />
               ))}
-            </div>
+            </nav>
           )}
           {group2.length > 0 && (
-            <div className="flex flex-col items-center gap-1 rounded-full bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
+            <nav className="flex flex-col gap-1 overflow-hidden rounded-[24px] bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
               {group2.map((link) => (
-                <CircleLink key={link.href} link={link} active={isActive(link)} />
+                <RailLink key={link.href} link={link} active={isActive(link)} />
               ))}
-            </div>
+            </nav>
           )}
         </div>
 
-        {/* Bloc compte : Paramètres (si présent) + Déconnexion, toujours ensemble en bas. */}
-        <div className="flex flex-col items-center gap-1 rounded-full bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
+        <div className="flex flex-col gap-1 overflow-hidden rounded-[24px] bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
           {group3.map((link) => (
-            <CircleLink key={link.href} link={link} active={isActive(link)} />
+            <RailLink key={link.href} link={link} active={isActive(link)} />
           ))}
           <button
             type="button"
             onClick={handleLogout}
             title="Se déconnecter"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-espresso-600 transition-colors hover:bg-cream-100"
+            className="flex h-11 items-center gap-3 overflow-hidden whitespace-nowrap rounded-full px-3.5 text-espresso-600 transition-colors hover:bg-cream-100"
           >
-            <LogOut className="h-[18px] w-[18px]" />
-          </button>
-        </div>
-      </div>
-
-      {/* Survol : même rail, mais chaque capsule s'élargit et révèle ses libellés — toujours trois blocs distincts, jamais fondus en une seule liste. */}
-      <div className="absolute inset-0 flex flex-col justify-between opacity-0 transition-opacity duration-150 group-hover:opacity-100">
-        <div className="flex flex-col gap-3">
-          {group1.length > 0 && (
-            <nav className="flex flex-col gap-1 rounded-[24px] bg-white p-2 shadow-2xl shadow-espresso-900/10 ring-1 ring-espresso-900/5">
-              {group1.map((link) => (
-                <RowLink key={link.href} link={link} active={isActive(link)} />
-              ))}
-            </nav>
-          )}
-          {group2.length > 0 && (
-            <nav className="flex flex-col gap-1 rounded-[24px] bg-white p-2 shadow-2xl shadow-espresso-900/10 ring-1 ring-espresso-900/5">
-              {group2.map((link) => (
-                <RowLink key={link.href} link={link} active={isActive(link)} />
-              ))}
-            </nav>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1 rounded-[24px] bg-white p-2 shadow-2xl shadow-espresso-900/10 ring-1 ring-espresso-900/5">
-          {fullName && <span className="truncate px-3 pt-1 text-sm text-espresso-500">{fullName}</span>}
-          {group3.map((link) => (
-            <RowLink key={link.href} link={link} active={isActive(link)} />
-          ))}
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex items-center gap-3 whitespace-nowrap rounded-full px-3 py-2.5 text-sm font-medium text-espresso-700 transition-colors hover:bg-cream-100 hover:text-accent"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            Se déconnecter
+            <LogOut className="h-[18px] w-[18px] shrink-0" />
+            <span className="text-sm font-medium opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-150">
+              Se déconnecter
+            </span>
           </button>
         </div>
       </div>

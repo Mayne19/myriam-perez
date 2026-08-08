@@ -1,19 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import AdminTopBar from "@/components/admin/AdminTopBar";
+import { useAdminTopBarSearch } from "@/components/admin/AdminTopBarContext";
 import type { LearnerRow } from "@/lib/admin/learners";
 
-export default function ApprenantsView({
-  learners,
-  fullName,
-  demoMode,
-}: {
-  learners: LearnerRow[];
-  fullName: string | null;
-  demoMode: boolean;
-}) {
+export default function ApprenantsView({ learners }: { learners: LearnerRow[] }) {
   const [search, setSearch] = useState("");
+
+  useAdminTopBarSearch({ value: search, onChange: setSearch, placeholder: "Rechercher un apprenant…" });
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -25,14 +19,6 @@ export default function ApprenantsView({
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminTopBar
-        fullName={fullName}
-        demoMode={demoMode}
-        search={search}
-        onSearchChange={setSearch}
-        searchPlaceholder="Rechercher un apprenant…"
-      />
-
       <h1 className="text-2xl font-medium text-espresso-900">Apprenants</h1>
 
       {filtered.length === 0 ? (

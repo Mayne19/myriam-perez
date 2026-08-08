@@ -1,57 +1,77 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { CreditCard, GraduationCap, HelpCircle, Settings, User } from "lucide-react";
-import ProfileMenu, { type ProfileMenuItem } from "@/components/ProfileMenu";
+import { usePathname, useRouter } from "next/navigation";
+import { GraduationCap, LogOut, User } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { exitDemo } from "@/app/demo/actions";
 
 const LINKS = [
-  { label: "Mes formations", href: "/espace" },
-  { label: "Profil", href: "/espace/profil" },
-];
+  { label: "Mes formations", href: "/espace", icon: GraduationCap, exact: true },
+  { label: "Profil", href: "/espace/profil", icon: User, exact: false },
+] as const;
 
-const PROFILE_MENU_ITEMS: ProfileMenuItem[] = [
-  { label: "Mon profil", href: "/espace/profil", icon: User },
-  { label: "Mes formations", href: "/espace", icon: GraduationCap },
-  { label: "Abonnement", href: "/espace/abonnement", icon: CreditCard },
-  { label: "Aide & support", href: "/espace/aide", icon: HelpCircle },
-  { label: "Paramètres", href: "/espace/profil", icon: Settings },
-];
-
-export default function EspaceNav({ fullName, demoMode = false }: { fullName: string | null; demoMode?: boolean }) {
+/*
+  Même rail que AdminNav (voir ce composant pour le détail de l'anti-rebond
+  et du hover) mais réduit aux seules sections de l'espace apprenant. Pas
+  de découpage en blocs ici : juste deux liens + déconnexion, un seul
+  groupe suffit.
+*/
+export default function EspaceNav({ demoMode = false }: { fullName: string | null; demoMode?: boolean }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    if (!confirm("Se déconnecter ?")) return;
+    if (demoMode) {
+      await exitDemo();
+      return;
+    }
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login?mode=login");
+    router.refresh();
+  }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-espresso-900/10 bg-cream-50/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/espace" className="flex items-center gap-3 no-underline">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/icon-mp.png" alt="Myriam Perez" className="h-10 w-auto" />
-          <span className="hidden flex-col leading-tight text-espresso-900 sm:flex">
-            <span className="font-bold tracking-tight">Espace apprenant</span>
-            <span className="text-xs font-medium text-espresso-400">Inspire &amp; Impact</span>
-          </span>
-        </Link>
-
-        <nav className="flex items-center gap-1 text-sm font-medium text-espresso-700">
+    <div className="peer/nav group fixed left-4 top-28 bottom-4 z-30 w-16 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 hover:w-56 hover:delay-0">
+      <div className="flex h-full flex-col justify-between">
+        <nav className="flex flex-col gap-1 overflow-hidden rounded-[24px] bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
           {LINKS.map((link) => {
-            const active = link.href === "/espace" ? pathname === "/espace" : pathname.startsWith(link.href);
+            const active = link.exact ? pathname === link.href : pathname.startsWith(link.href);
+            const Icon = link.icon;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`no-underline rounded-full px-4 py-2 transition-colors hover:text-accent ${
-                  active ? "bg-accent-bg font-semibold text-accent-text" : ""
+                title={link.label}
+                className={`flex h-11 items-center gap-3 overflow-hidden whitespace-nowrap rounded-full px-3.5 no-underline transition-colors ${
+                  active ? "bg-accent text-cream-50" : "text-espresso-600 hover:bg-cream-100"
                 }`}
               >
-                {link.label}
+                <Icon className="h-[18px] w-[18px] shrink-0" />
+                <span className="text-sm font-medium opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-150">
+                  {link.label}
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        <ProfileMenu fullName={fullName} items={PROFILE_MENU_ITEMS} demoMode={demoMode} />
+        <div className="flex flex-col gap-1 overflow-hidden rounded-[24px] bg-white p-1.5 shadow-lg shadow-espresso-900/10 ring-1 ring-espresso-900/5">
+          <button
+            type="button"
+            onClick={handleLogout}
+            title="Se déconnecter"
+            className="flex h-11 items-center gap-3 overflow-hidden whitespace-nowrap rounded-full px-3.5 text-espresso-600 transition-colors hover:bg-cream-100"
+          >
+            <LogOut className="h-[18px] w-[18px] shrink-0" />
+            <span className="text-sm font-medium opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover:delay-150">
+              Se déconnecter
+            </span>
+          </button>
+        </div>
       </div>
-    </header>
+    </div>
   );
 }

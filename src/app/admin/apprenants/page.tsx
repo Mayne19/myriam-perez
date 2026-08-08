@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getCurrentProfile } from "@/lib/supabase/profile";
-import { isSupabaseConfigured } from "@/lib/demo";
 import { getLearners } from "@/lib/admin/learners";
 import ApprenantsView from "@/components/admin/ApprenantsView";
 
@@ -15,5 +14,5 @@ export default async function AdminLearnersPage() {
 
   const learners = await getLearners();
 
-  return <ApprenantsView learners={learners} fullName={profile.full_name} demoMode={!isSupabaseConfigured()} />;
+  return <ApprenantsView learners={learners} />;
 }
