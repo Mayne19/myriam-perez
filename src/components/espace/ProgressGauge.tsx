@@ -4,6 +4,7 @@ type ProgressGaugeProps = {
   strokeWidth?: number;
   label?: string;
   className?: string;
+  children?: React.ReactNode;
 };
 
 /*
@@ -12,7 +13,7 @@ type ProgressGaugeProps = {
   affiché. Remplissage en accent, piste en accent-bg (même rampe, plus
   claire) pour que l'état se lise sur tout l'anneau.
 */
-export default function ProgressGauge({ percent, size = 160, strokeWidth = 12, label, className = "" }: ProgressGaugeProps) {
+export default function ProgressGauge({ percent, size = 160, strokeWidth = 12, label, className = "", children }: ProgressGaugeProps) {
   const clamped = Math.min(100, Math.max(0, percent));
   const radius = 50 - strokeWidth / 2;
   const circumference = 2 * Math.PI * radius;
@@ -36,10 +37,16 @@ export default function ProgressGauge({ percent, size = 160, strokeWidth = 12, l
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center px-2 text-center">
-        <span className="font-sans font-semibold text-espresso-900" style={{ fontSize: size * 0.24 }}>
-          {clamped}%
-        </span>
-        {label && <span className="mt-1 text-xs text-espresso-400">{label}</span>}
+        {children ? (
+          children
+        ) : (
+          <>
+            <span className="font-sans font-semibold text-espresso-900" style={{ fontSize: size * 0.24 }}>
+              {clamped}%
+            </span>
+            {label && <span className="mt-1 text-xs text-espresso-400">{label}</span>}
+          </>
+        )}
       </div>
     </div>
   );

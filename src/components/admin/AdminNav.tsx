@@ -102,7 +102,7 @@ export default function AdminNav({ role, demoMode = false }: { role: "admin" | "
 
   return (
     <>
-      <nav className="fixed left-[38px] top-[88px] z-30" onMouseEnter={handleEnter} onMouseLeave={handleLeave} aria-label="Myriam Perez">
+      <nav className="fixed left-[38px] top-[88px] z-30" aria-label="Myriam Perez">
         <Link href="/admin" className="flex h-11 items-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full no-underline">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}

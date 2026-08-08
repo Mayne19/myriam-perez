@@ -26,7 +26,7 @@ export default async function EspaceLayout({ children }: { children: React.React
         <EspaceNav fullName={profile.full_name} demoMode={demoMode} />
         <EspaceContent>
           <EspaceTopBar fullName={profile.full_name} demoMode={demoMode} />
-          <div className="mx-auto mt-6 max-w-5xl">{children}</div>
+          <div className="mt-6">{children}</div>
         </EspaceContent>
       </AdminNavProvider>
     </div>

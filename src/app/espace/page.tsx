@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { BadgeCheck } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { getCoursesWithProgress, getGlobalProgress } from "@/lib/learning";
-import ProgressGauge from "@/components/espace/ProgressGauge";
 import CourseCard from "@/components/espace/CourseCard";
+import ProfileCard from "@/components/espace/ProfileCard";
+import ProgressChart from "@/components/espace/ProgressChart";
+import SplitHeading from "@/components/SplitHeading";
+import FadeIn from "@/components/FadeIn";
 
 export const metadata: Metadata = {
   title: "Mes formations | Espace apprenant — Inspire & Impact",
@@ -18,28 +22,39 @@ export default async function EspaceDashboardPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-10">
-      <section className="flex flex-col items-center gap-6 rounded-3xl border border-espresso-900/10 bg-white p-8 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-        <div>
-          <p className="text-xs font-medium tracking-[0.2em] text-accent">Inspire &amp; Impact</p>
-          <h1 className="mt-2 text-2xl font-medium text-espresso-900">
-            Bienvenue{profile.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}
-          </h1>
-          <p className="mt-2 max-w-md text-sm text-espresso-500">
-            {global.completed} vidéo{global.completed > 1 ? "s" : ""} terminée{global.completed > 1 ? "s" : ""} sur {global.total || "—"} au total, sur les 135 heures du programme.
-          </p>
-        </div>
-        <ProgressGauge percent={global.percent} label="Progression globale" size={140} />
-      </section>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+      <div className="flex flex-col gap-10 lg:col-span-3">
+        <FadeIn className="relative min-h-[320px] overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#F07020_0%,#D8B15B_55%,#C05A18_100%)] p-8">
+          {/* max-w en "ch" (largeur de caractère) : tient sur 2 lignes quelle que soit la taille h3 */}
+          <SplitHeading
+            as="h3"
+            text="Un parcours structuré, du premier module à la certification."
+            muted={["un", "du", "premier", "module", "à", "la"]}
+            boldClassName="text-cream-50"
+            className="text-balance max-w-[27ch]"
+          />
 
-      <section>
-        <h2 className="text-xl font-medium text-espresso-900">Mes formations</h2>
-        <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
-      </section>
+          {/* Repère factuel, comme le badge flottant de la référence */}
+          <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 rounded-2xl bg-cream-50 px-4 py-3 shadow-[0_10px_30px_-12px_rgba(38,34,30,0.5)]">
+            <BadgeCheck className="h-6 w-6 shrink-0 text-accent" strokeWidth={1.75} />
+            <p className="text-sm font-medium text-espresso-900">Organisme de formation agréé CPMT</p>
+          </div>
+        </FadeIn>
+
+        <section>
+          <h2 className="text-xl font-medium text-espresso-900">Mes formations</h2>
+          <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <div className="flex flex-col gap-6 lg:sticky lg:top-6 lg:self-start lg:col-span-1">
+        <ProfileCard fullName={profile.full_name} percent={global.percent} />
+        <ProgressChart courses={courses} />
+      </div>
     </div>
   );
 }
