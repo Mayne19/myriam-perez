@@ -205,7 +205,6 @@
   animation-play-state: paused;
 }
 
-@media (prefers-reduced-motion: reduce) {
 /* Rail à défilement horizontal piloté par les flèches : la barre native est masquée. */
 .no-scrollbar {
   scrollbar-width: none;
@@ -215,6 +214,7 @@
   display: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
 .marquee-track {
     animation: none;
   }
