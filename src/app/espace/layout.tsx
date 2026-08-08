@@ -20,7 +20,7 @@ export default async function EspaceLayout({ children }: { children: React.React
   return (
     <div className="h-svh overflow-hidden bg-cream-50">
       <EspaceNav fullName={profile.full_name} demoMode={demoMode} />
-      <main className="ml-24 h-svh overflow-y-auto px-8 py-6 transition-[margin] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] peer-hover/nav:ml-64">
+      <main className="ml-[104px] h-svh overflow-y-auto px-8 py-6 transition-[margin] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] peer-hover/nav:ml-[256px]">
         <EspaceTopBar fullName={profile.full_name} demoMode={demoMode} />
         <div className="mx-auto mt-6 max-w-5xl">{children}</div>
       </main>
