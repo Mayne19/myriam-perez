@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { getCourseDetail, type ChapterStatus } from "@/lib/learning";
-import CourseChecklist from "@/components/espace/CourseChecklist";
-import ProgressChart from "@/components/espace/ProgressChart";
+import { MOCK_COURSES } from "@/lib/mock/data";
+import CourseSidebar from "@/components/espace/CourseSidebar";
 
 const STATUS_LABEL: Record<ChapterStatus, string> = {
   done: "Terminé",
@@ -24,6 +24,9 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
 
   const course = await getCourseDetail(params.slug, profile.id);
   if (!course) notFound();
+
+  const currentIndex = MOCK_COURSES.findIndex((c) => c.slug === params.slug);
+  const nextCourse = currentIndex >= 0 && currentIndex < MOCK_COURSES.length - 1 ? MOCK_COURSES[currentIndex + 1] : null;
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:min-h-[calc(100svh-136px)]">
@@ -65,8 +68,12 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
       </div>
 
       <div className="flex w-full flex-col gap-6 lg:w-[360px] lg:shrink-0 lg:sticky lg:top-6">
-        <CourseChecklist title={course.title} chapters={course.chapters} />
-        <ProgressChart chapters={course.chapters} />
+        <CourseSidebar
+          title={course.title}
+          chapters={course.chapters}
+          nextCourseSlug={nextCourse?.slug}
+          nextCourseTitle={nextCourse?.title.replace(/^Formation \d+ — /, "")}
+        />
       </div>
     </div>
   );
