@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { getCourseDetail, type ChapterStatus } from "@/lib/learning";
+import { MOCK_COURSES } from "@/lib/mock/data";
 import CourseContentCard from "@/components/espace/CourseContentCard";
 import ProgressChart from "@/components/espace/ProgressChart";
 
@@ -24,6 +25,10 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
 
   const course = await getCourseDetail(params.slug, profile.id);
   if (!course) notFound();
+
+  const currentIndex = MOCK_COURSES.findIndex((c) => c.slug === params.slug);
+  const prevCourse = currentIndex > 0 ? MOCK_COURSES[currentIndex - 1] : null;
+  const nextCourse = currentIndex >= 0 && currentIndex < MOCK_COURSES.length - 1 ? MOCK_COURSES[currentIndex + 1] : null;
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:min-h-[calc(100svh-136px)]">
@@ -61,6 +66,31 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
               <ChevronRight className="h-4 w-4 text-espresso-300" />
             </Link>
           ))}
+        </div>
+
+        <div className="flex items-center justify-between gap-4 border-t border-espresso-900/10 pt-6">
+          {prevCourse ? (
+            <Link
+              href={`/espace/formations/${prevCourse.slug}`}
+              className="flex items-center gap-2 rounded-full border border-espresso-900/10 bg-white px-5 py-2.5 text-sm font-medium text-espresso-700 no-underline transition-colors hover:border-accent/30 hover:text-accent"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              {prevCourse.title.replace(/^Formation \d+ — /, "")}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {nextCourse ? (
+            <Link
+              href={`/espace/formations/${nextCourse.slug}`}
+              className="flex items-center gap-2 rounded-full border border-espresso-900/10 bg-white px-5 py-2.5 text-sm font-medium text-espresso-700 no-underline transition-colors hover:border-accent/30 hover:text-accent"
+            >
+              {nextCourse.title.replace(/^Formation \d+ — /, "")}
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          ) : (
+            <span />
+          )}
         </div>
       </div>
 
