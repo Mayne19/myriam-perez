@@ -22,14 +22,16 @@ export type DemoProfile = {
   id: string;
   full_name: string;
   email: string;
+  avatar_url: null;
+  username: string;
   status: "active";
   role: DemoRole;
 };
 
 const DEMO_PROFILES: Record<DemoRole, DemoProfile> = {
-  learner: { id: "demo-learner", full_name: "Alex Tremblay", email: "alex@exemple.com", status: "active", role: "learner" },
-  admin: { id: "demo-admin", full_name: "Myriam Perez", email: "myriam@exemple.com", status: "active", role: "admin" },
-  editor: { id: "demo-editor", full_name: "Camille Roy", email: "camille@exemple.com", status: "active", role: "editor" },
+  learner: { id: "demo-learner", full_name: "Alex Tremblay", email: "alex@exemple.com", avatar_url: null, username: "alex", status: "active", role: "learner" },
+  admin: { id: "demo-admin", full_name: "Myriam Perez", email: "myriam@exemple.com", avatar_url: null, username: "myriam", status: "active", role: "admin" },
+  editor: { id: "demo-editor", full_name: "Camille Roy", email: "camille@exemple.com", avatar_url: null, username: "camille", status: "active", role: "editor" },
 };
 
 /*

@@ -5,6 +5,8 @@ export type Profile = {
   id: string;
   full_name: string | null;
   email: string | null;
+  avatar_url: string | null;
+  username: string | null;
   status: "pending" | "active";
   role: "learner" | "admin" | "editor";
 };
@@ -28,7 +30,7 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 
   const { data } = await supabase
     .from("profiles")
-    .select("id, full_name, email, status, role")
+    .select("id, full_name, email, avatar_url, username, status, role")
     .eq("id", user.id)
     .maybeSingle();
 

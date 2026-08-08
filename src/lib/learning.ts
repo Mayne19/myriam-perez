@@ -11,6 +11,7 @@ export type CourseSummary = {
   totalVideos: number;
   completedVideos: number;
   percent: number;
+  lastOpenedAt: string | null;
 };
 
 export type ChapterStatus = "done" | "in_progress" | "not_started";
@@ -50,6 +51,12 @@ export async function getCoursesWithProgress(userId: string): Promise<CourseSumm
       const videoIds = course.chapters.flatMap((c) => c.videos.map((v) => v.id));
       const completedVideos = videoIds.filter((id) => progress.get(id)?.completed).length;
       const totalVideos = videoIds.length;
+      const lastOpenedAt =
+        videoIds
+          .map((id) => progress.get(id)?.lastOpenedAt)
+          .filter((t): t is string => Boolean(t))
+          .sort()
+          .at(-1) ?? null;
       return {
         id: course.id,
         slug: course.slug,
@@ -59,6 +66,7 @@ export async function getCoursesWithProgress(userId: string): Promise<CourseSumm
         totalVideos,
         completedVideos,
         percent: totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0,
+        lastOpenedAt,
       };
     });
   }
@@ -72,17 +80,25 @@ export async function getCoursesWithProgress(userId: string): Promise<CourseSumm
 
   const { data: progressRows } = await supabase
     .from("video_progress")
-    .select("video_id, completed")
-    .eq("user_id", userId)
-    .eq("completed", true);
+    .select("video_id, completed, updated_at")
+    .eq("user_id", userId);
 
-  const completedIds = new Set((progressRows ?? []).map((r) => r.video_id as string));
+  const completedIds = new Set((progressRows ?? []).filter((r) => r.completed).map((r) => r.video_id as string));
+  const lastOpenedByVideo = new Map(
+    (progressRows ?? []).map((r) => [r.video_id as string, r.updated_at as string | null | undefined]),
+  );
 
   return (courses ?? []).map((course) => {
     const chapters = (course.chapters ?? []) as { videos: { id: string }[] }[];
     const videoIds = chapters.flatMap((c) => c.videos.map((v) => v.id));
     const completedVideos = videoIds.filter((id) => completedIds.has(id)).length;
     const totalVideos = videoIds.length;
+    const lastOpenedAt =
+      videoIds
+        .map((id) => lastOpenedByVideo.get(id))
+        .filter((t): t is string => Boolean(t))
+        .sort()
+        .at(-1) ?? null;
     return {
       id: course.id,
       slug: course.slug,
@@ -92,6 +108,7 @@ export async function getCoursesWithProgress(userId: string): Promise<CourseSumm
       totalVideos,
       completedVideos,
       percent: totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0,
+      lastOpenedAt,
     };
   });
 }

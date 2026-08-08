@@ -139,7 +139,7 @@ export const MOCK_LEARNERS: LearnerRow[] = [
 // --- Stockage fichier pour la partie modifiable (articles, invitations, --
 // --- rôles de l'équipe, progression vidéo) ---------------------------------
 
-type ProgressEntry = { secondsWatched: number; completed: boolean };
+type ProgressEntry = { secondsWatched: number; completed: boolean; lastOpenedAt?: string };
 type StoreShape = {
   articles: AdminArticle[];
   categories: BlogCategory[];
@@ -192,13 +192,14 @@ function seedStore(): StoreShape {
       { id: "demo-editor", fullName: "Camille Roy", email: "camille@exemple.com", role: "editor" },
     ],
     // Formation 1 terminée et Formation 2 à moitié, pour que le dashboard
-    // démo ne parte pas de zéro.
+    // démo ne parte pas de zéro. Les horodatages servent à déterminer la
+    // « dernière formation ouverte » (la plus récemment consultée).
     progress: {
       "demo-learner": {
-        "video-1-1-1": { secondsWatched: 596, completed: true },
-        "video-1-1-2": { secondsWatched: 596, completed: true },
-        "video-1-2-1": { secondsWatched: 596, completed: true },
-        "video-2-1-1": { secondsWatched: 596, completed: true },
+        "video-1-1-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-01T10:00:00.000Z" },
+        "video-1-1-2": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-02T10:00:00.000Z" },
+        "video-1-2-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-03T10:00:00.000Z" },
+        "video-2-1-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-10T10:00:00.000Z" },
       },
     },
   };
@@ -236,7 +237,10 @@ export function getMockProgressMap(userId: string): Map<string, ProgressEntry> {
 
 export function setMockProgress(userId: string, videoId: string, entry: ProgressEntry) {
   const store = readStore();
-  store.progress[userId] = { ...(store.progress[userId] ?? {}), [videoId]: entry };
+  store.progress[userId] = {
+    ...(store.progress[userId] ?? {}),
+    [videoId]: { ...entry, lastOpenedAt: new Date().toISOString() },
+  };
   writeStore(store);
 }
 
