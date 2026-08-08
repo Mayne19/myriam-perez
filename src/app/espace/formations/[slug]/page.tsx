@@ -68,28 +68,24 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-espresso-900/10 pt-6">
+        <div className="flex items-center justify-between">
           {prevCourse ? (
             <Link
               href={`/espace/formations/${prevCourse.slug}`}
-              className="flex items-center gap-2 rounded-full border border-espresso-900/10 bg-white px-5 py-2.5 text-sm font-medium text-espresso-700 no-underline transition-colors hover:border-accent/30 hover:text-accent"
+              className="flex items-center gap-1 text-sm font-medium text-espresso-700 no-underline hover:text-accent"
             >
-              <ChevronLeft className="h-4 w-4" />
-              {prevCourse.title.replace(/^Formation \d+ — /, "")}
+              <ChevronLeft className="h-4 w-4" /> Formation précédente
             </Link>
           ) : (
             <span />
           )}
-          {nextCourse ? (
+          {nextCourse && (
             <Link
               href={`/espace/formations/${nextCourse.slug}`}
-              className="flex items-center gap-2 rounded-full border border-espresso-900/10 bg-white px-5 py-2.5 text-sm font-medium text-espresso-700 no-underline transition-colors hover:border-accent/30 hover:text-accent"
+              className="flex items-center gap-1 text-sm font-medium text-espresso-700 no-underline hover:text-accent"
             >
-              {nextCourse.title.replace(/^Formation \d+ — /, "")}
-              <ChevronRight className="h-4 w-4" />
+              Formation suivante <ChevronRight className="h-4 w-4" />
             </Link>
-          ) : (
-            <span />
           )}
         </div>
       </div>
