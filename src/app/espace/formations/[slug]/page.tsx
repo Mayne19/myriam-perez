@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
-import { getCourseDetail, getCoursesWithProgress, getGlobalProgress, type ChapterStatus } from "@/lib/learning";
+import { getCourseDetail, type ChapterStatus } from "@/lib/learning";
 import CourseChecklist from "@/components/espace/CourseChecklist";
 import ProgressChart from "@/components/espace/ProgressChart";
 
@@ -22,11 +22,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
   const profile = await getCurrentProfile();
   if (!profile) return null;
 
-  const [course, courses, global] = await Promise.all([
-    getCourseDetail(params.slug, profile.id),
-    getCoursesWithProgress(profile.id),
-    getGlobalProgress(profile.id),
-  ]);
+  const course = await getCourseDetail(params.slug, profile.id);
   if (!course) notFound();
 
   return (
