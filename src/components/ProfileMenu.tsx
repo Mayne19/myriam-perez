@@ -63,17 +63,18 @@ export default function ProfileMenu({
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative flex items-center gap-3">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Menu du profil"
-        className={`flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-semibold text-cream-50 transition-shadow ${
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#F07020_0%,#D8B15B_55%,#C05A18_100%)] text-sm font-semibold text-cream-50 transition-shadow ${
           open ? "ring-2 ring-accent/30 ring-offset-2 ring-offset-cream-50" : ""
         }`}
       >
         {initials(fullName)}
       </button>
+      <span className="text-sm font-medium text-espresso-700">{fullName}</span>
 
       {open && (
         <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl bg-white p-2 shadow-2xl shadow-espresso-900/10 ring-1 ring-espresso-900/5">

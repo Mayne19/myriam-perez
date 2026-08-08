@@ -14,6 +14,9 @@ export default async function AdminBlogPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <Link href="/admin" className="text-sm font-medium text-espresso-400 no-underline hover:text-accent">
+        ← Retour
+      </Link>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-medium text-espresso-900">Articles</h1>
         <Link

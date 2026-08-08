@@ -14,7 +14,7 @@ export default async function FormationsPage() {
   const courses = await getCoursesWithProgress(profile.id);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-[calc(100svh-136px)] flex-col gap-6">
       <h1 className="text-2xl font-medium text-espresso-900">Formations</h1>
 
       {courses.length === 0 ? (
@@ -22,7 +22,7 @@ export default async function FormationsPage() {
           Aucune formation disponible pour l&apos;instant.
         </p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid flex-1 auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}

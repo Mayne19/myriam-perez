@@ -41,19 +41,22 @@ export default async function EspaceDashboardPage() {
 
   let lowerCards: { course: CourseSummary; started: boolean }[] = [];
   if (lastOpened && inProgress.length === 1) {
-    lowerCards = notStarted.slice(0, 3).map((course) => ({ course, started: false }));
+    lowerCards = notStarted.map((course) => ({ course, started: false }));
   } else if (lastOpened) {
     lowerCards = [
       ...otherInProgress.map((course) => ({ course, started: true })),
       ...notStarted.map((course) => ({ course, started: false })),
-    ].slice(0, 3);
+    ];
   } else if (notStarted.length > 0) {
-    lowerCards = notStarted.slice(0, 3).map((course) => ({ course, started: false }));
+    lowerCards = notStarted.map((course) => ({ course, started: false }));
   }
 
+  // Hauteur minimale = 100svh − 88 (topbar + marges du haut) − 48 (décalage de
+  // la capsule basse du rail : bottom-4 + mb-8). Les deux colonnes finissent
+  // donc sur la même ligne que le bas de la capsule Paramètres / Se déconnecter.
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-      <div className="flex flex-col gap-10 lg:col-span-3">
+    <div className="flex flex-col gap-6 lg:flex-row lg:min-h-[calc(100svh-136px)]">
+      <div className="flex flex-col gap-10 lg:min-w-0 lg:flex-1">
         <FadeIn className="relative flex min-h-[200px] flex-col justify-between overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#F07020_0%,#D8B15B_55%,#C05A18_100%)] p-8">
           {/* max-w en "ch" (largeur de caractère) : tient sur 2 lignes quelle que soit la taille h3 */}
           <div>
@@ -104,7 +107,7 @@ export default async function EspaceDashboardPage() {
         </section>
       </div>
 
-      <div className="flex flex-col gap-6 lg:sticky lg:top-6 lg:col-span-1">
+      <div className="flex w-full flex-col gap-6 lg:w-[360px] lg:shrink-0 lg:sticky lg:top-6">
         <ProfileCard
           fullName={profile.full_name}
           percent={global.percent}

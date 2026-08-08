@@ -36,7 +36,7 @@ export default function MiniCourseCard({ course, started }: { course: CourseSumm
         ) : (
           <div className="flex items-center justify-between text-xs text-espresso-400">
             <span>{course.totalVideos || "—"} vidéos</span>
-            <span className="inline-flex items-center gap-1.5 font-semibold text-accent">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-espresso-900/20 px-3.5 py-1.5 font-medium text-espresso-900 transition-colors group-hover:border-espresso-900 group-hover:bg-espresso-900 group-hover:text-cream-50">
               <Play className="h-3.5 w-3.5" strokeWidth={2} />
               Commencer
             </span>

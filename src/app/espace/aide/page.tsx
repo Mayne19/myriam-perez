@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 
@@ -8,6 +9,9 @@ export const metadata: Metadata = {
 export default function AidePage() {
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
+      <Link href="/espace" className="text-sm font-medium text-espresso-400 no-underline hover:text-accent">
+        ← Retour
+      </Link>
       <h1 className="text-2xl font-medium text-espresso-900">Aide &amp; support</h1>
 
       <div className="rounded-2xl border border-espresso-900/10 bg-white p-6">

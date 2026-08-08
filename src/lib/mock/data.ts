@@ -59,6 +59,44 @@ export const MOCK_COURSES: MockCourse[] = [
           { id: "video-1-2-1", title: "La règle des trois idées", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
         ],
       },
+      {
+        id: "chapter-1-3",
+        courseId: "course-1",
+        title: "Gérer le stress avant de parler",
+        orderIndex: 3,
+        videos: [
+          { id: "video-1-3-1", title: "Techniques de relaxation", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-1-3-2", title: "Visualisation positive", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-1-4",
+        courseId: "course-1",
+        title: "Captiver son auditoire",
+        orderIndex: 4,
+        videos: [
+          { id: "video-1-4-1", title: "L'art de lauspens", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-1-5",
+        courseId: "course-1",
+        title: "Les techniques de respiration",
+        orderIndex: 5,
+        videos: [
+          { id: "video-1-5-1", title: "Respiration diaphragmatique", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-1-5-2", title: "Ralentir le débit", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-1-6",
+        courseId: "course-1",
+        title: "Clore avec impact",
+        orderIndex: 6,
+        videos: [
+          { id: "video-1-6-1", title: "Conclusion memorable", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
     ],
   },
   {
@@ -78,6 +116,53 @@ export const MOCK_COURSES: MockCourse[] = [
           { id: "video-2-1-2", title: "Découper en modules", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
         ],
       },
+      {
+        id: "chapter-2-2",
+        courseId: "course-2",
+        title: "Concevoir le contenu interactif",
+        orderIndex: 2,
+        videos: [
+          { id: "video-2-2-1", title: "Quiz et exercices", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-2-3",
+        courseId: "course-2",
+        title: "Rédiger le script",
+        orderIndex: 3,
+        videos: [
+          { id: "video-2-3-1", title: "Planifier le fil conducteur", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-2-3-2", title: "Écrire les transitions", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-2-4",
+        courseId: "course-2",
+        title: "Préparer le support visuel",
+        orderIndex: 4,
+        videos: [
+          { id: "video-2-4-1", title: "Diapositives efficaces", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-2-5",
+        courseId: "course-2",
+        title: "Tester et ajuster",
+        orderIndex: 5,
+        videos: [
+          { id: "video-2-5-1", title: "Séance test", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-2-5-2", title: "Corrections et révisions", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-2-6",
+        courseId: "course-2",
+        title: "Lancer sa formation",
+        orderIndex: 6,
+        videos: [
+          { id: "video-2-6-1", title: "Mise en ligne", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
     ],
   },
   {
@@ -92,7 +177,56 @@ export const MOCK_COURSES: MockCourse[] = [
         courseId: "course-3",
         title: "Lire une salle",
         orderIndex: 1,
-        videos: [{ id: "video-3-1-1", title: "Les signaux d'engagement", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 }],
+        videos: [
+          { id: "video-3-1-1", title: "Les signaux d'engagement", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-3-2",
+        courseId: "course-3",
+        title: "Gérer les participants difficiles",
+        orderIndex: 2,
+        videos: [
+          { id: "video-3-2-1", title: "Techniques de recadrage", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-3-2-2", title: "Transformer les objections", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-3-3",
+        courseId: "course-3",
+        title: "Stimuler la participation",
+        orderIndex: 3,
+        videos: [
+          { id: "video-3-3-1", title: "Questions interactives", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-3-4",
+        courseId: "course-3",
+        title: "Maintenir l'énergie",
+        orderIndex: 4,
+        videos: [
+          { id: "video-3-4-1", title: "Pause et activités", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-3-4-2", title: "Jeux et cas pratiques", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-3-5",
+        courseId: "course-3",
+        title: "Clore une session",
+        orderIndex: 5,
+        videos: [
+          { id: "video-3-5-1", title: "Synthèse et engagement", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-3-6",
+        courseId: "course-3",
+        title: "Évaluer les acquis",
+        orderIndex: 6,
+        videos: [
+          { id: "video-3-6-1", title: "Quiz final", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
       },
     ],
   },
@@ -108,7 +242,56 @@ export const MOCK_COURSES: MockCourse[] = [
         courseId: "course-4",
         title: "Construire son offre",
         orderIndex: 1,
-        videos: [{ id: "video-4-1-1", title: "Positionnement tarifaire", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 }],
+        videos: [
+          { id: "video-4-1-1", title: "Positionnement tarifaire", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-4-2",
+        courseId: "course-4",
+        title: "Marketing et visibilité",
+        orderIndex: 2,
+        videos: [
+          { id: "video-4-2-1", title: "Présence en ligne", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-4-2-2", title: "Réseaux sociaux", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-4-3",
+        courseId: "course-4",
+        title: " Fidéliser les apprenants",
+        orderIndex: 3,
+        videos: [
+          { id: "video-4-3-1", title: "Suivi personnalisé", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-4-4",
+        courseId: "course-4",
+        title: "Générer des revenus",
+        orderIndex: 4,
+        videos: [
+          { id: "video-4-4-1", title: "Modèles de tarification", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-4-4-2", title: "Ventes incitatives", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-4-5",
+        courseId: "course-4",
+        title: "Planifier sa croissance",
+        orderIndex: 5,
+        videos: [
+          { id: "video-4-5-1", title: "Objectifs à 6 mois", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-4-6",
+        courseId: "course-4",
+        title: "Automatiser",
+        orderIndex: 6,
+        videos: [
+          { id: "video-4-6-1", title: "Outils et workflows", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
       },
     ],
   },
@@ -124,16 +307,65 @@ export const MOCK_COURSES: MockCourse[] = [
         courseId: "course-5",
         title: "La posture du formateur accompli",
         orderIndex: 1,
-        videos: [{ id: "video-5-1-1", title: "Synthèse et posture finale", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 }],
+        videos: [
+          { id: "video-5-1-1", title: "Authority et charisme", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-5-2",
+        courseId: "course-5",
+        title: "Le langage corporel",
+        orderIndex: 2,
+        videos: [
+          { id: "video-5-2-1", title: "Gestes et regard", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-5-2-2", title: "Déplacement sur scène", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-5-3",
+        courseId: "course-5",
+        title: "La voix comme outil",
+        orderIndex: 3,
+        videos: [
+          { id: "video-5-3-1", title: "Moduler le ton", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-5-4",
+        courseId: "course-5",
+        title: "Raconter des histoires",
+        orderIndex: 4,
+        videos: [
+          { id: "video-5-4-1", title: "Le pouvoir du storytelling", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+          { id: "video-5-4-2", title: "Exemples vécus", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 2 },
+        ],
+      },
+      {
+        id: "chapter-5-5",
+        courseId: "course-5",
+        title: "Gérer le stress",
+        orderIndex: 5,
+        videos: [
+          { id: "video-5-5-1", title: "Pleine conscience", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
+      },
+      {
+        id: "chapter-5-6",
+        courseId: "course-5",
+        title: "Synthèse et posture finale",
+        orderIndex: 6,
+        videos: [
+          { id: "video-5-6-1", title: "Plan d'action personnel", videoUrl: SAMPLE_VIDEO_URL, durationSeconds: 596, orderIndex: 1 },
+        ],
       },
     ],
   },
 ];
 
 export const MOCK_LEARNERS: LearnerRow[] = [
-  { id: "demo-learner", fullName: "Alex Tremblay", email: "alex@exemple.com", paymentStatus: "active", createdAt: "2026-06-01", completedVideos: 4, totalVideos: 8, percent: 50 },
-  { id: "learner-2", fullName: "Sophie Bergeron", email: "sophie@exemple.com", paymentStatus: "active", createdAt: "2026-06-10", completedVideos: 8, totalVideos: 8, percent: 100 },
-  { id: "learner-3", fullName: "Marc-André Gagnon", email: "marc@exemple.com", paymentStatus: "pending", createdAt: "2026-07-20", completedVideos: 0, totalVideos: 8, percent: 0 },
+  { id: "demo-learner", fullName: "Alex Tremblay", email: "alex@exemple.com", paymentStatus: "active", createdAt: "2026-06-01", completedVideos: 7, totalVideos: 42, percent: 17 },
+  { id: "learner-2", fullName: "Sophie Bergeron", email: "sophie@exemple.com", paymentStatus: "active", createdAt: "2026-06-10", completedVideos: 42, totalVideos: 42, percent: 100 },
+  { id: "learner-3", fullName: "Marc-André Gagnon", email: "marc@exemple.com", paymentStatus: "pending", createdAt: "2026-07-20", completedVideos: 0, totalVideos: 42, percent: 0 },
 ];
 
 // --- Stockage fichier pour la partie modifiable (articles, invitations, --
@@ -199,7 +431,12 @@ function seedStore(): StoreShape {
         "video-1-1-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-01T10:00:00.000Z" },
         "video-1-1-2": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-02T10:00:00.000Z" },
         "video-1-2-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-03T10:00:00.000Z" },
+        "video-1-3-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-04T10:00:00.000Z" },
+        "video-1-3-2": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-05T10:00:00.000Z" },
+        "video-1-4-1": { secondsWatched: 300, completed: false, lastOpenedAt: "2026-07-06T10:00:00.000Z" },
         "video-2-1-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-10T10:00:00.000Z" },
+        "video-2-1-2": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-11T10:00:00.000Z" },
+        "video-2-2-1": { secondsWatched: 596, completed: true, lastOpenedAt: "2026-07-12T10:00:00.000Z" },
       },
     },
   };

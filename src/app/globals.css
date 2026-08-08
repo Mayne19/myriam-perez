@@ -206,7 +206,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+/* Rail à défilement horizontal piloté par les flèches : la barre native est masquée. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track {
     animation: none;
   }
   .marquee {

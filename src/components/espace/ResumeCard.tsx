@@ -18,7 +18,11 @@ export default function ResumeCard({ course, started }: { course: CourseSummary;
       </div>
       <Link
         href={`/espace/formations/${course.slug}`}
-        className="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-cream-50 transition-colors hover:bg-accent-dark"
+        className={`inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium no-underline transition-colors ${
+          started
+            ? "bg-accent font-semibold text-cream-50 hover:bg-[#d9641a] hover:text-cream-50"
+            : "border border-espresso-900/20 text-espresso-900 hover:border-espresso-900 hover:bg-espresso-900 hover:text-cream-50"
+        }`}
       >
         <Play className="h-4 w-4" strokeWidth={2} />
         {started ? "Continuer" : "Commencer"}

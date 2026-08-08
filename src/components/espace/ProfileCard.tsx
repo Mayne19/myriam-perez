@@ -49,7 +49,9 @@ export default function ProfileCard({
         </div>
       </div>
       {username && (
-        <p className="text-sm font-medium text-accent">@{username}</p>
+        <p className="bg-[linear-gradient(135deg,#F07020_0%,#D8B15B_55%,#C05A18_100%)] bg-clip-text text-lg font-semibold text-transparent">
+          @{username}
+        </p>
       )}
       <h2 className="text-2xl font-medium leading-none text-espresso-900">
         Bonjour{firstName(fullName) ? `, ${firstName(fullName)}` : ""} 👋
