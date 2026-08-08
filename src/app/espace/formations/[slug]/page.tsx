@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
-import { getCourseDetail, getGlobalProgress, type ChapterStatus } from "@/lib/learning";
-import ProfileCard from "@/components/espace/ProfileCard";
+import { getCourseDetail, type ChapterStatus } from "@/lib/learning";
+import CourseContentCard from "@/components/espace/CourseContentCard";
 import ProgressChart from "@/components/espace/ProgressChart";
 
 const STATUS_LABEL: Record<ChapterStatus, string> = {
@@ -22,10 +22,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
   const profile = await getCurrentProfile();
   if (!profile) return null;
 
-  const [course, global] = await Promise.all([
-    getCourseDetail(params.slug, profile.id),
-    getGlobalProgress(profile.id),
-  ]);
+  const course = await getCourseDetail(params.slug, profile.id);
   if (!course) notFound();
 
   return (
@@ -68,12 +65,7 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
       </div>
 
       <div className="flex w-full flex-col gap-6 lg:w-[360px] lg:shrink-0 lg:sticky lg:top-6">
-        <ProfileCard
-          fullName={profile.full_name}
-          percent={global.percent}
-          photoUrl={profile.avatar_url}
-          username={profile.username}
-        />
+        <CourseContentCard slug={course.slug} />
         <ProgressChart
           title="Progression par cours"
           subtitle="Vidéos terminées, cours par cours."
