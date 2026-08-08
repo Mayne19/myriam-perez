@@ -8,7 +8,7 @@ const PROFILE_MENU_ITEMS: ProfileMenuItem[] = [
   { label: "Mes formations", href: "/espace", icon: GraduationCap },
   { label: "Abonnement", href: "/espace/abonnement", icon: CreditCard },
   { label: "Aide & support", href: "/espace/aide", icon: HelpCircle },
-  { label: "Paramètres", href: "/espace/profil", icon: Settings },
+  { label: "Paramètres", href: "/espace/parametres", icon: Settings },
 ];
 
 export default function EspaceTopBar({ fullName, demoMode = false }: { fullName: string | null; demoMode?: boolean }) {

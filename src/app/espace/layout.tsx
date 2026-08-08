@@ -2,13 +2,16 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { isSupabaseConfigured } from "@/lib/demo";
 import EspaceNav from "@/components/espace/EspaceNav";
+import EspaceContent from "@/components/espace/EspaceContent";
 import EspaceTopBar from "@/components/espace/EspaceTopBar";
+import { AdminNavProvider } from "@/components/admin/AdminNavContext";
 
 /*
   Layout du groupe /espace (dashboard apprenant). Réservé aux comptes de
   rôle "learner" ; un admin/éditeur qui atterrit ici est renvoyé vers son
-  propre panel. Même structure rail+topbar que /admin (voir ce layout),
-  réduite aux sections de l'espace apprenant.
+  propre panel. Même structure rail+topbar que /admin : le rail (EspaceNav)
+  partage l'état d'expansion via AdminNavContext, et EspaceContent réserve
+  sa marge gauche en miroir, exactement comme dans le panel admin.
 */
 export default async function EspaceLayout({ children }: { children: React.ReactNode }) {
   const demoMode = !isSupabaseConfigured();
@@ -19,11 +22,13 @@ export default async function EspaceLayout({ children }: { children: React.React
 
   return (
     <div className="h-svh overflow-hidden bg-cream-50">
-      <EspaceNav fullName={profile.full_name} demoMode={demoMode} />
-      <main className="ml-[104px] h-svh overflow-y-auto px-8 py-6 transition-[margin] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] peer-hover/nav:ml-[256px]">
-        <EspaceTopBar fullName={profile.full_name} demoMode={demoMode} />
-        <div className="mx-auto mt-6 max-w-5xl">{children}</div>
-      </main>
+      <AdminNavProvider>
+        <EspaceNav fullName={profile.full_name} demoMode={demoMode} />
+        <EspaceContent>
+          <EspaceTopBar fullName={profile.full_name} demoMode={demoMode} />
+          <div className="mx-auto mt-6 max-w-5xl">{children}</div>
+        </EspaceContent>
+      </AdminNavProvider>
     </div>
   );
 }
