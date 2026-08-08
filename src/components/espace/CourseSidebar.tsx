@@ -32,30 +32,26 @@ export default function CourseSidebar({
   const remaining = total - done;
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Resume du cours */}
-      <div className="flex flex-col rounded-2xl border border-espresso-900/10 bg-white p-6">
-        <h2 className="text-lg font-medium text-espresso-900">{title}</h2>
-        <p className="mt-1 text-sm text-espresso-500">
-          {percent}% complété · {remaining} vidéos restantes
-        </p>
+    <div className="flex flex-col rounded-2xl border border-espresso-900/10 bg-white p-6">
+      <h2 className="text-lg font-medium text-espresso-900">{title}</h2>
+      <p className="mt-1 text-sm text-espresso-500">
+        {percent}% complété · {remaining} vidéos restantes
+      </p>
 
-        <div className="mt-4 flex items-center gap-3">
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-accent-bg">
-            <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${percent}%` }} />
-          </div>
-          <span className="text-sm font-semibold text-accent">{percent}%</span>
+      <div className="mt-4 flex items-center gap-3">
+        <div className="h-2 flex-1 overflow-hidden rounded-full bg-accent-bg">
+          <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${percent}%` }} />
         </div>
-
-        <div className="mt-3 flex items-center gap-1.5 text-xs text-espresso-400">
-          <Clock className="h-3.5 w-3.5" />
-          <span> environ {Math.ceil(remaining * 10)} min de cours</span>
-        </div>
+        <span className="text-sm font-semibold text-accent">{percent}%</span>
       </div>
 
-      {/* Prochaine vidéo */}
+      <div className="mt-3 flex items-center gap-1.5 text-xs text-espresso-400">
+        <Clock className="h-3.5 w-3.5" />
+        <span>environ {Math.ceil(remaining * 10)} min de cours</span>
+      </div>
+
       {next && (
-        <div className="flex flex-col rounded-2xl border border-espresso-900/10 bg-white p-6">
+        <div className="mt-6 border-t border-espresso-900/10 pt-5">
           <p className="text-xs font-medium uppercase tracking-wider text-espresso-400">À suivre</p>
           <p className="mt-1 text-sm font-medium text-espresso-900">{next.title}</p>
           <p className="mt-0.5 text-xs text-espresso-400">
@@ -71,26 +67,26 @@ export default function CourseSidebar({
         </div>
       )}
 
-      {/* Cours suivant */}
       {nextCourseSlug && nextCourseTitle && (
-        <Link
-          href={`/espace/formations/${nextCourseSlug}`}
-          className="flex items-center justify-between rounded-2xl border border-espresso-900/10 bg-white p-6 no-underline transition-colors hover:border-accent/30 hover:shadow-md"
-        >
-          <div>
-            <p className="text-xs font-medium uppercase tracking-wider text-espresso-400">Cours suivant</p>
-            <p className="mt-1 text-sm font-medium text-espresso-900">{nextCourseTitle}</p>
-          </div>
-          <ArrowRight className="h-5 w-5 shrink-0 text-espresso-400" />
-        </Link>
+        <div className="mt-6 border-t border-espresso-900/10 pt-5">
+          <Link
+            href={`/espace/formations/${nextCourseSlug}`}
+            className="flex items-center justify-between no-underline transition-colors hover:text-accent"
+          >
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-espresso-400">Cours suivant</p>
+              <p className="mt-1 text-sm font-medium text-espresso-900">{nextCourseTitle}</p>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-espresso-400" />
+          </Link>
+        </div>
       )}
 
-      {/* Progression par cours */}
-      <div className="flex flex-1 flex-col rounded-2xl border border-espresso-900/10 bg-white p-6">
-        <h2 className="text-2xl font-medium text-espresso-900">Progression par cours</h2>
-        <p className="mt-1 text-sm text-espresso-500">Vidéos terminées, cours par cours.</p>
+      <div className="mt-6 border-t border-espresso-900/10 pt-5">
+        <p className="text-sm font-medium text-espresso-900">Progression par cours</p>
+        <p className="mt-0.5 text-xs text-espresso-500">Vidéos terminées, cours par cours.</p>
 
-        <div className="mt-6 flex min-h-36 flex-1 items-end gap-3">
+        <div className="mt-4 flex min-h-36 items-end gap-3">
           {chapters.map((ch, i) => {
             const pct = ch.totalVideos > 0 ? Math.round((ch.completedVideos / ch.totalVideos) * 100) : 0;
             return (

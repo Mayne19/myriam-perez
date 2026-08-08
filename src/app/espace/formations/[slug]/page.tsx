@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, CircleCheck, CircleDashed, CirclePlay } from "lucide-react";
 import { getCurrentProfile } from "@/lib/supabase/profile";
-import { getCourseDetail, type ChapterStatus } from "@/lib/learning";
-import { MOCK_COURSES } from "@/lib/mock/data";
-import CourseSidebar from "@/components/espace/CourseSidebar";
+import { getCourseDetail, getGlobalProgress, type ChapterStatus } from "@/lib/learning";
+import ProfileCard from "@/components/espace/ProfileCard";
+import ProgressChart from "@/components/espace/ProgressChart";
 
 const STATUS_LABEL: Record<ChapterStatus, string> = {
   done: "Terminé",
@@ -22,11 +22,11 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
   const profile = await getCurrentProfile();
   if (!profile) return null;
 
-  const course = await getCourseDetail(params.slug, profile.id);
+  const [course, global] = await Promise.all([
+    getCourseDetail(params.slug, profile.id),
+    getGlobalProgress(profile.id),
+  ]);
   if (!course) notFound();
-
-  const currentIndex = MOCK_COURSES.findIndex((c) => c.slug === params.slug);
-  const nextCourse = currentIndex >= 0 && currentIndex < MOCK_COURSES.length - 1 ? MOCK_COURSES[currentIndex + 1] : null;
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:min-h-[calc(100svh-136px)]">
@@ -68,11 +68,16 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
       </div>
 
       <div className="flex w-full flex-col gap-6 lg:w-[360px] lg:shrink-0 lg:sticky lg:top-6">
-        <CourseSidebar
-          title={course.title}
+        <ProfileCard
+          fullName={profile.full_name}
+          percent={global.percent}
+          photoUrl={profile.avatar_url}
+          username={profile.username}
+        />
+        <ProgressChart
+          title="Progression par cours"
+          subtitle="Vidéos terminées, cours par cours."
           chapters={course.chapters}
-          nextCourseSlug={nextCourse?.slug}
-          nextCourseTitle={nextCourse?.title.replace(/^Formation \d+ — /, "")}
         />
       </div>
     </div>

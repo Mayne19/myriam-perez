@@ -8,9 +8,13 @@ type BarItem = {
 };
 
 export default function ProgressChart({
+  title = "Progression par formation",
+  subtitle = "Vidéos terminées, formation par formation.",
   courses,
   chapters,
 }: {
+  title?: string;
+  subtitle?: string;
   courses?: CourseSummary[];
   chapters?: ChapterSummary[];
 }) {
@@ -31,8 +35,8 @@ export default function ProgressChart({
 
   return (
     <div className="flex flex-1 flex-col rounded-2xl border border-espresso-900/10 bg-white p-6">
-      <h2 className="text-2xl font-medium text-espresso-900">Progression par cours</h2>
-      <p className="mt-1 text-sm text-espresso-500">Vidéos terminées, cours par cours.</p>
+      <h2 className="text-2xl font-medium text-espresso-900">{title}</h2>
+      <p className="mt-1 text-sm text-espresso-500">{subtitle}</p>
 
       <div className="mt-6 flex min-h-36 flex-1 items-end gap-3">
         {bars.map((bar) => (
